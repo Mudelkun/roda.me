@@ -151,7 +151,6 @@
   gap: 34px;
   padding: 28px;
   border: 1px solid var(--line-soft);
-  border-radius: 0;
 }
 
 .pcard[data-brand] .pcard__title {
@@ -170,7 +169,6 @@
 .pcard[data-brand] .btn--primary:hover { box-shadow: inset 0 1px 0 rgb(255 255 255 / .28); }
 
 .pcard[data-brand] .pcard__frame {
-  border-radius: 0;
   border-color: var(--line);
   background: var(--brand-surface);
   transform: perspective(1100px) rotateX(var(--rx)) rotateY(var(--ry));
@@ -326,7 +324,6 @@ html[data-brand] .feature__name { font-weight: 600; font-size: 15px; }
 html[data-brand] .feature__body p { font-size: 14px; line-height: 1.6; }
 
 html[data-brand] .layer { border-bottom-color: var(--line-soft); padding-block: 16px; }
-html[data-brand] .psec .layer__why { font-size: 14px; line-height: 1.6; color: var(--fg-faint); margin-top: 8px; }
 
 /* ---------- rail ---------- */
 

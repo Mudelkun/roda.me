@@ -78,6 +78,15 @@
 }
 .hero__tags .pill:hover { transform: translateY(-1px); border-color: var(--accent); }
 
+/* Language flags: real colours, so no fill: currentColor like .pill__icon. */
+.pill__flag {
+  width: 16px; height: 11px;
+  flex: none;
+  border-radius: 2px;
+  margin-left: -2px;
+  box-shadow: 0 0 0 1px var(--line);
+}
+
 .hero__bio-wrap { display: flex; flex-direction: column; gap: 9px; align-items: flex-start; }
 
 .hero__bio { max-width: 560px; }
@@ -512,27 +521,28 @@
 .projects__list { display: flex; flex-direction: column; gap: 20px; list-style: none; margin: 0; padding: 0; }
 
 .pcard {
+  --pcard-ink: var(--fg);
   display: grid;
   grid-template-columns: minmax(0, 420px) minmax(0, 1fr);
   gap: 22px;
   border: 1px solid var(--line);
+  border-radius: 16px;
   padding: 18px;
   cursor: pointer;
+  /* Offset box behind the card: always there in a soft tint. */
+  box-shadow: -6px 6px 0 var(--line);
   transition:
     transform .35s cubic-bezier(.34, 1.8, .5, 1),
     box-shadow .35s cubic-bezier(.34, 1.8, .5, 1),
     border-color .2s ease;
 }
-/* Doodle box: on hover the card springs up-right and grows a solid black side.
-   The 1px steps join the corners into one extruded block; the last two steps ink its edge. */
+[data-theme="light"] .pcard { --pcard-ink: #000; }
+/* On hover the card springs up-right and the box behind it grows and turns solid. */
 @media (hover: hover) {
   .projects__list .pcard:hover {
-    transform: translate(6px, -6px);
-    border-color: var(--fg);
-    box-shadow:
-      -1px 1px 0 #000, -2px 2px 0 #000, -3px 3px 0 #000, -4px 4px 0 #000, -5px 5px 0 #000,
-      -6px 6px 0 #000, -7px 7px 0 #000, -8px 8px 0 #000, -9px 9px 0 #000, -10px 10px 0 #000,
-      -11px 11px 0 var(--fg), -12px 12px 0 var(--fg);
+    transform: translate(4px, -4px);
+    border-color: var(--pcard-ink);
+    box-shadow: -12px 12px 0 var(--pcard-ink);
   }
 }
 .pcard:nth-child(even) { grid-template-columns: minmax(0, 1fr) minmax(0, 420px); }
@@ -544,6 +554,7 @@
   position: relative;
   aspect-ratio: 16 / 9;
   border: 1px solid var(--line);
+  border-radius: 10px;
   background: var(--fill);
   overflow: hidden;
 }

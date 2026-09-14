@@ -164,6 +164,7 @@ button.pmedia__frame { cursor: zoom-in; }
   display: grid; place-items: center;
   font-size: 14px; color: var(--accent-text);
 }
+.feature__ic .icon { width: 17px; height: 17px; }
 .feature__body { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
 .feature__name { font: 700 14px Archivo, sans-serif; margin: 0; }
 .feature__body p { font-size: 14px; }
@@ -179,7 +180,7 @@ button.pmedia__frame { cursor: zoom-in; }
   border-bottom: 1px solid var(--line-soft);
 }
 .layer:first-child { padding-top: 0; }
-.layer__why { grid-column: 2; font-size: 13px; color: var(--fg-faint); margin: 6px 0 0; }
+.pill__logo { width: 14px; height: 14px; flex: none; }
 
 /* architecture */
 .arch {

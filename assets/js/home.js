@@ -53,7 +53,7 @@
         }).join("") + "</div>" : "";
 
       return '' +
-        '<div class="pcard__media" data-slides-scope' + (project.brand ? " data-brand-reveal" : "") + '>' +
+        '<div class="pcard__media" data-slides-scope>' +
           '<a class="pcard__frame pcard__frame--slides" href="' + esc(projectUrl(project)) + '" ' +
             'aria-label="Open the ' + esc(project.title) + ' write-up" data-frame data-slides="3800" data-tilt="5">' +
             imgs +
@@ -76,7 +76,6 @@
 
   function cardBody(project) {
     var branded = !!(project.brand && window.Brand);
-    var reveal = function (i) { return branded ? ' data-brand-reveal style="--i:' + i + '"' : ""; };
 
     var actions = '<a class="btn btn--primary" href="' + esc(project.live) + '" target="_blank" rel="noopener">Try it live →</a>';
     if (project.source) {
@@ -86,10 +85,10 @@
 
     return '' +
       '<div class="pcard__body">' +
-        '<h3 class="pcard__title"' + reveal(1) + '><a href="' + esc(projectUrl(project)) + '" style="text-decoration:none">' +
+        '<h3 class="pcard__title"><a href="' + esc(projectUrl(project)) + '" style="text-decoration:none">' +
           (branded ? Brand.title(project.title, esc) : esc(project.title)) + "</a></h3>" +
-        '<div class="pcard__summary"' + reveal(2) + ">" + summaryHtml(project.summary) + "</div>" +
-        '<div class="pcard__actions"' + reveal(3) + ">" + actions + "</div>" +
+        '<div class="pcard__summary">' + summaryHtml(project.summary) + "</div>" +
+        '<div class="pcard__actions">' + actions + "</div>" +
       "</div>";
   }
 

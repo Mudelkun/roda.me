@@ -27,13 +27,19 @@
   function pills(items) {
     return items.map(function (t) { return '<li><span class="pill">' + esc(t) + "</span></li>"; }).join("");
   }
+
+  /* Blank lines in the copy start a new paragraph. */
+  function paras(text) {
+    return String(text).split(/\n\s*\n/).map(function (p) { return "<p>" + esc(p.trim()) + "</p>"; }).join("");
+  }
   /* ---------- sections ---------- */
 
   function sections(project) {
     var list = [];
 
-    if (project.whatItDoes) list.push({ id: "what", title: "What it does", html: "<p>" + esc(project.whatItDoes) + "</p>" });
-    if (project.whyIBuiltIt) list.push({ id: "why", title: "Why I built it", html: "<p>" + esc(project.whyIBuiltIt) + "</p>" });
+    if (project.description) list.push({ id: "overview", title: "Short description", html: paras(project.description) });
+    if (project.whatItDoes) list.push({ id: "what", title: "What it does", html: paras(project.whatItDoes) });
+    if (project.whyIBuiltIt) list.push({ id: "why", title: "Why I built it", html: paras(project.whyIBuiltIt) });
 
     if (project.features && project.features.length) {
       list.push({
@@ -42,7 +48,7 @@
         html: '<ul class="features">' + project.features.map(function (f) {
           return '' +
             '<li class="feature" data-glow>' +
-              '<span class="feature__ic" aria-hidden="true">' + esc(f.icon || "◆") + "</span>" +
+              '<span class="feature__ic" aria-hidden="true">' + ((window.Icons && Icons.feature(f.icon)) || esc(f.icon || "◆")) + "</span>" +
               '<span class="feature__body">' +
                 '<span class="feature__name">' + esc(f.name) + "</span>" +
                 "<p>" + esc(f.text) + "</p>" +
@@ -60,8 +66,9 @@
           return '' +
             '<div class="layer">' +
               '<h3 class="h-sub">' + esc(layer.layer) + "</h3>" +
-              '<ul class="stack-tags">' + pills(layer.items) + "</ul>" +
-              (layer.why ? '<p class="layer__why">' + esc(layer.why) + "</p>" : "") +
+              '<ul class="stack-tags">' + layer.items.map(function (t) {
+                return '<li><span class="pill">' + (window.Icons ? Icons.logo(t) : "") + esc(t) + "</span></li>";
+              }).join("") + "</ul>" +
             "</div>";
         }).join("") + "</div>"
       });
@@ -78,11 +85,11 @@
       list.push({
         id: "built",
         title: "How it's built",
-        html: (project.howItsBuilt ? "<p>" + esc(project.howItsBuilt) + "</p>" : "") + arch
+        html: (project.howItsBuilt ? paras(project.howItsBuilt) : "") + arch
       });
     }
 
-    if (project.whatILearned) list.push({ id: "learned", title: "What I learned", html: "<p>" + esc(project.whatILearned) + "</p>" });
+    if (project.whatILearned) list.push({ id: "learned", title: "What I learned", html: paras(project.whatILearned) });
 
     return list;
   }

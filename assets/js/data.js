@@ -104,24 +104,22 @@ window.SITE = {
         radius: "20px",
         ease: "cubic-bezier(0.22, 1, 0.36, 1)"
       },
-      whatItDoes: "You upload a photo, answer two questions — gender and hair type — and the catalog narrows to the cuts that actually work on hair like yours. Pick one and Louvo generates a preview of you wearing it, with a before-and-after compare, a download, and a share link you can send to the barber. Your first two generations are free; after that you sign in and buy a pack of credits.",
-      whyIBuiltIt: "A haircut is a decision you make from a photograph of somebody else's head, and you find out whether it was right about three weeks too late. The demo is forty seconds long and it sells itself, which made it the right thing to build end to end: I wanted one project where authentication, payments, a generation queue and a real privacy promise all had to hold at once, not a front-end with a mock behind it.",
+      description: "Louvo is a simple AI-powered web app that lets anyone see what they could look like with a different hairstyle before actually getting it. Upload a photo of yourself, choose a hairstyle, and Louvo generates a realistic preview of you with that hairstyle.\n\nLouvo uses advanced AI image editing to create realistic results while keeping your facial features and overall appearance as close to the original photo as possible.\n\nThe goal is simple: try the hairstyle before you commit to it.",
+      /* icon: a key from assets/js/icons.js */
       features: [
-        { icon: "◈", name: "Photo to preview", text: "One upload becomes a photoreal render of you in the chosen cut, generated on Fal.ai behind the API rather than from a key the browser could read." },
-        { icon: "◉", name: "Before and after", text: "The result lands next to the original photo, so the comparison is the product rather than a screenshot you take yourself." },
-        { icon: "▲", name: "A real catalog", text: "Sixty-four haircuts with their own mannequin renders per hair type, held in Postgres and served as WebP from a CDN." },
-        { icon: "■", name: "Credits you can trust", text: "Balances are server-side and transactional: held at submit, spent when the preview lands, refunded when it does not. The browser is never trusted with the number." },
-        { icon: "●", name: "Sign-in and checkout", text: "A mailed six-digit code, or Clerk where a key is configured; payment is a hosted Stripe Checkout, so the site holds no card field and no publishable key." },
-        { icon: "◆", name: "Rendered for search", text: "Every haircut has its own server-rendered URL with the cut's own render as its og:image — sixty-four real entry points instead of one client-side bundle." }
+        { icon: "catalogue", name: "Hairstyle catalogue", text: "Browse a catalogue of 64+ hairstyles organized into different categories. Some hairstyles allow you to customize the hair length and hair type. Each hairstyle includes four different views that you can easily navigate through." },
+        { icon: "preview", name: "Photo to preview", text: "Choose a hairstyle from the catalogue, upload a selfie, and click \"Generate My Preview.\" Louvo uses AI image editing to create a realistic preview of you with the selected hairstyle." },
+        { icon: "compare", name: "Before & after", text: "Compare your original photo with your generated preview using the \"Compare with Your Photo\" feature, making it easy to see the difference." },
+        { icon: "pricing", name: "Free & paid previews", text: "Your first preview is free. To get an additional free preview, you can create an account. Once your previews are used, you can purchase additional preview packs starting at $4.99." }
       ],
+      /* Each item's logo comes from assets/js/icons.js, looked up by name. */
       stack: [
-        { layer: "Front-end", items: ["Next.js", "React", "Tailwind", "TypeScript"], why: "The catalog has to be found and linked, which means server-rendered pages with real metadata — a client-only bundle cannot do that." },
-        { layer: "Back-end", items: ["Node", "Fastify", "Postgres", "Cloudflare R2"], why: "A small API and a separate worker on Railway; renders are WebP objects in R2 behind its CDN, and photos live in a private bucket with signed, short-lived URLs." },
-        { layer: "Auth + payments", items: ["Clerk", "Resend", "Stripe Checkout"], why: "Sign-in is a mailed six-digit code with Clerk as a second provider; checkout is hosted by Stripe, so no card data ever touches my code." },
-        { layer: "AI", items: ["Fal.ai"], why: "One provider generates both the per-user previews and the catalog's own mannequin renders, called from the worker rather than the browser." }
+        { layer: "Front-end", items: ["Next.js", "React", "Tailwind CSS", "TypeScript"] },
+        { layer: "Back-end", items: ["Node.js", "Fastify", "PostgreSQL", "Cloudflare R2"] },
+        { layer: "Auth + payments", items: ["Clerk", "Stripe"] },
+        { layer: "AI", items: ["Fal.ai"] }
       ],
-      howItsBuilt: "A Next.js front end against a Fastify API on Railway, with Postgres for the catalog, accounts and credits, and Cloudflare R2 behind a CDN for imagery. Generation is a queue, not a request: the browser submits a job and the photo goes straight to a private bucket through a signed, short-lived URL, then a separate worker calls Fal and writes the result back — so a slow model never holds a request open. The decision I would defend is keeping the generator key and the credit balance entirely server-side: the client is never trusted with either, which is what makes the privacy promise on the upload box literally true rather than aspirational.",
-      whatILearned: "That the honest version of \"we do not store your photo\" is a lot of plumbing: signed URLs, a delete after handoff, and a share card that names a hairstyle instead of carrying a face. I also deleted a landing page I had already built — a hero, three explanatory sections and a separate pricing page, with the product one click behind a button. The whole proposition is a forty-second demonstration, so the upload box became the first thing on the page and everything in front of it went.",
+      whatILearned: "Louvo was an interesting project to build because it was my first time integrating AI into a web application. Through the project, I learned a lot about building applications around AI image generation, especially how to optimize the experience while keeping AI costs as low as possible without sacrificing the quality of the results.\n\nI also learned how to work more effectively with AI coding agents by giving clear instructions, breaking down problems, and guiding the development process toward the result I wanted.\n\nMost importantly, Louvo showed me how powerful AI can be when combined with a well-designed product. It pushed me toward exploring and building more AI-powered applications in the future.",
       /* Detail page only: leads the screens stage and holds for one full loop (ms). */
       demo: { src: "assets/media/The%20louvo%20app.gif", caption: "The app in motion — upload a photo, pick a cut, see the preview", hold: 24600 },
       screens: [

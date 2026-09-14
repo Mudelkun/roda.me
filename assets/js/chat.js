@@ -220,12 +220,12 @@
       return named.whatILearned;
     }
 
-    if (/why/.test(q) && named) {
+    if (/why/.test(q) && named && named.whyIBuiltIt) {
       return named.whyIBuiltIt;
     }
 
     if (named) {
-      return named.whatItDoes + " " + named.pitch;
+      return [named.description || named.whatItDoes, named.pitch].filter(Boolean).join(" ");
     }
 
     if (/project|work|portfolio|built/.test(q)) {
