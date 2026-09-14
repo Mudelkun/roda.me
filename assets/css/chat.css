@@ -1,0 +1,112 @@
+/* The "ask me a question" panel.
+   Desktop (3a / 4a): a bordered phone-UI card that sits in the layout.
+   Mobile (3b / 4b): a fixed pull-up sheet docked to the bottom of the viewport. */
+
+.chat {
+  border: 2px solid var(--line);
+  border-radius: 16px;
+  background: var(--panel);
+  padding: 14px;
+  display: flex; flex-direction: column; gap: 10px;
+}
+
+.chat__head { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+
+.chat__status {
+  width: 10px; height: 10px; border-radius: 50%;
+  background: var(--accent);
+  flex: none;
+}
+.chat__status[data-state="off"] { background: transparent; border: 1px solid var(--line); }
+
+.chat__handle { display: none; }
+
+.chat__log {
+  display: flex; flex-direction: column; gap: 8px;
+  max-height: 260px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+}
+
+.chat__msg {
+  max-width: 88%;
+  padding: 9px 13px;
+  border-radius: 14px;
+  font-size: 14px;
+  line-height: 1.45;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.chat__msg--bot { background: var(--fill-strong); color: var(--fg); align-self: flex-start; }
+.chat__msg--user { background: var(--accent-wash); color: var(--fg); align-self: flex-end; border: 1px solid var(--accent); }
+.chat__msg--err { background: transparent; border: 1px dashed var(--line); color: var(--fg-faint); align-self: flex-start; }
+
+.chat__typing { display: inline-flex; gap: 4px; align-items: center; }
+.chat__typing i {
+  width: 5px; height: 5px; border-radius: 50%; background: var(--fg-faint);
+  animation: chat-bounce 1s infinite ease-in-out;
+}
+.chat__typing i:nth-child(2) { animation-delay: .15s; }
+.chat__typing i:nth-child(3) { animation-delay: .3s; }
+@keyframes chat-bounce { 0%, 60%, 100% { transform: translateY(0); opacity: .5; } 30% { transform: translateY(-4px); opacity: 1; } }
+
+.chat__suggestions { display: flex; gap: 6px; flex-wrap: wrap; }
+.chat__suggestions .pill { cursor: pointer; background: transparent; }
+.chat__suggestions .pill:hover { border-color: var(--accent); color: var(--accent-text); }
+
+.chat__form { display: flex; gap: 8px; align-items: center; }
+
+.chat__input {
+  flex: 1; min-width: 0;
+  height: 40px;
+  padding: 0 14px;
+  border-radius: 20px;
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--fg);
+  font: 400 14px Archivo, system-ui, sans-serif;
+}
+.chat__input::placeholder { color: var(--fg-faint); }
+
+.chat__send {
+  flex: none;
+  width: 40px; height: 40px; min-height: 0;
+  padding: 0;
+  border-radius: 20px;
+  font-size: 15px;
+}
+
+/* ---------- mobile sheet ---------- */
+
+@media (max-width: 860px) {
+  .chat {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 70;
+    border-radius: 16px 16px 0 0;
+    border-width: 2px 0 0;
+    padding: 8px var(--gut) calc(14px + env(safe-area-inset-bottom, 0px));
+    gap: 8px;
+    max-height: 84dvh;
+    box-shadow: 0 -8px 30px rgba(0, 0, 0, .35);
+    transition: transform .25s ease;
+  }
+
+  .chat__handle {
+    display: block;
+    width: 40px; height: 4px; border-radius: 2px;
+    background: var(--line);
+    border: 0; padding: 0;
+    margin: 4px auto 2px;
+    cursor: grab;
+    flex: none;
+  }
+
+  /* Collapsed: only the handle, the label row and the composer are visible. */
+  .chat[data-open="false"] .chat__log,
+  .chat[data-open="false"] .chat__suggestions,
+  .chat[data-open="false"] .chat__blurb { display: none; }
+
+  .chat[data-open="false"] .chat__head { padding-bottom: 2px; }
+
+  .chat__log { max-height: 46dvh; }
+}

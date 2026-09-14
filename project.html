@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Project — Your Name</title>
+<meta name="description" content="A project deep-dive: what it does, why it was built, the stack behind it, and what came out of it.">
+<meta name="theme-color" content="#101a16">
+
+<link rel="icon" href="assets/media/favicon.svg" type="image/svg+xml">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/chat.css">
+<link rel="stylesheet" href="assets/css/project.css">
+<link rel="stylesheet" href="assets/css/brand.css">
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="shell site-header__in">
+    <div class="crumbs">
+      <a class="btn" href="index.html#projects" id="back-link">← Back</a>
+      <p class="crumbs__trail" id="crumbs">
+        <a href="index.html">Home</a><span class="crumbs__sep">/</span><a href="index.html#projects">Projects</a>
+      </p>
+    </div>
+
+    <nav class="nav" id="site-nav" aria-label="Sections">
+      <a class="nav__link" href="index.html#projects">Projects</a>
+      <a class="nav__link" href="index.html#contact">Contact me</a>
+    </nav>
+
+    <div class="header__tools">
+      <button class="theme-toggle" type="button" aria-pressed="false" aria-label="Switch to light mode">
+        <span class="theme-toggle__thumb" aria-hidden="true"></span>
+        <svg class="theme-toggle__icon theme-toggle__icon--sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+        <svg class="theme-toggle__icon theme-toggle__icon--moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7z"/></svg>
+      </button>
+      <button class="burger" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <div id="project-root">
+    <p class="shell note" style="padding-block:40px">Loading project…</p>
+  </div>
+</main>
+
+<footer class="site-footer shell">
+  <p>© <span id="year">2026</span> <span data-bind="profile.name">Your Name</span></p>
+  <p><a href="index.html">Back to the portfolio</a></p>
+</footer>
+
+<!-- screens lightbox -->
+<dialog class="lightbox" id="lightbox" aria-label="Screenshot">
+  <div class="lightbox__in">
+    <img id="lightbox-img" src="" alt="">
+    <div class="lightbox__bar">
+      <p class="lightbox__cap" id="lightbox-cap"></p>
+      <button class="btn" type="button" id="lightbox-close">✕ Close</button>
+    </div>
+  </div>
+</dialog>
+
+<script src="assets/js/data.js"></script>
+<script src="assets/js/ui.js"></script>
+<script src="assets/js/brand.js"></script>
+<script src="assets/js/chat.js"></script>
+<script src="assets/js/project.js"></script>
+</body>
+</html>

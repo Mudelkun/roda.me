@@ -1,0 +1,779 @@
+/* Wireframe 3a (desktop) / 3b (mobile) - the one-pager. */
+
+/* ═══════════════════════════════════════════════════════════════
+   hero / about
+   The section paints its own ground: a masked blueprint grid, a
+   fixed ambient wash behind the portrait, a pointer-tracked spot,
+   a grain pass and a veil that dissolves into the page below.
+   ═══════════════════════════════════════════════════════════════ */
+
+.hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border-bottom: 1px solid var(--line-soft);
+  background-color: var(--ground);
+
+  --hero-aura: rgba(255, 183, 77, .13);
+  --hero-spot: rgba(255, 183, 77, .1);
+  --hero-grid: rgba(246, 241, 228, .05);
+  --hero-rule: rgba(246, 241, 228, .1);
+  --hero-surface: rgba(255, 255, 255, .028);
+  --hero-raised: rgba(255, 255, 255, .05);
+  --hero-fade: #14211b;
+  --hero-pop: #1d2b24;
+  --hero-shadow: 0 20px 44px -32px rgba(0, 0, 0, .95);
+  --hero-lift: 0 14px 30px -20px rgba(0, 0, 0, .8);
+  --grain-opacity: .16;
+}
+
+[data-theme="light"] .hero {
+  --hero-aura: rgba(217, 130, 12, .16);
+  --hero-spot: rgba(217, 130, 12, .12);
+  --hero-grid: rgba(16, 26, 22, .05);
+  --hero-rule: rgba(16, 26, 22, .09);
+  --hero-surface: rgba(255, 253, 247, .66);
+  --hero-raised: rgba(255, 253, 247, .95);
+  --hero-fade: #f5efe1;
+  --hero-pop: #fffdf7;
+  --hero-shadow: 0 20px 44px -34px rgba(74, 52, 16, .5);
+  --hero-lift: 0 14px 28px -20px rgba(74, 52, 16, .38);
+  --grain-opacity: .05;
+}
+
+/* ---------- background stack ---------- */
+
+.hero__bg { position: absolute; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+.hero__bg > * { position: absolute; inset: 0; display: block; }
+
+/* Blueprint grid, faded out toward the edges so it reads as depth
+   rather than as graph paper laid over the whole band. */
+.hero__grid {
+  background-image:
+    linear-gradient(to right, var(--hero-grid) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--hero-grid) 1px, transparent 1px);
+  background-size: 76px 76px;
+  background-position: center top;
+  -webkit-mask-image: radial-gradient(115% 92% at 50% 6%, #000 30%, rgba(0, 0, 0, .35) 62%, transparent 88%);
+  mask-image: radial-gradient(115% 92% at 50% 6%, #000 30%, rgba(0, 0, 0, .35) 62%, transparent 88%);
+}
+
+/* Static warmth behind the identity block. */
+.hero__aura {
+  background:
+    radial-gradient(560px 420px at 14% 8%, var(--hero-aura), transparent 68%),
+    radial-gradient(680px 460px at 88% 96%, var(--hero-aura), transparent 72%);
+}
+
+/* Pointer-tracked light. Sized once, moved with a transform, so the
+   only thing that changes per frame is the compositor matrix. */
+.hero__spot {
+  inset: auto auto auto 0;
+  top: 0;
+  width: 620px; height: 620px;
+  border-radius: 50%;
+  background: radial-gradient(circle closest-side, var(--hero-spot), transparent 100%);
+  opacity: 0;
+  transition: opacity .55s ease;
+  will-change: transform;
+}
+.hero.is-tracking .hero__spot { opacity: 1; }
+
+.hero__grain {
+  opacity: var(--grain-opacity);
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E");
+}
+
+/* Dissolve into whatever follows, so the band has a floor. */
+.hero__veil { background: linear-gradient(to bottom, transparent 52%, var(--bg) 100%); }
+
+/* Hairline highlight under the sticky header. */
+.hero::before {
+  content: "";
+  position: absolute; inset-inline: 0; top: 0; height: 1px; z-index: 1;
+  background: linear-gradient(90deg, transparent, var(--hero-rule) 22%, var(--hero-rule) 78%, transparent);
+  pointer-events: none;
+}
+
+/* ---------- entrance ---------- */
+
+@media (prefers-reduced-motion: no-preference) {
+  .hero.can-reveal [data-reveal] {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  .hero.is-ready [data-reveal] {
+    opacity: 1;
+    transform: none;
+    transition:
+      opacity .72s cubic-bezier(.22, .61, .36, 1) var(--d, 0s),
+      transform .72s cubic-bezier(.22, .61, .36, 1) var(--d, 0s);
+  }
+}
+
+/* ---------- layout ---------- */
+
+.hero__in > * { min-width: 0; }
+
+.hero__in {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(0, auto) minmax(0, 1fr);
+  gap: 48px;
+  align-items: start;
+  padding-block: 52px 30px;
+  min-height: 460px;
+}
+
+.hero__id { display: flex; gap: 30px; align-items: flex-start; }
+
+/* ---------- portrait ---------- */
+
+.hero__portrait { position: relative; flex: none; }
+
+.hero__photo {
+  width: 132px; height: 132px;
+  border-radius: 50%;
+  border: 3px solid var(--accent);
+  object-fit: cover;
+  background: var(--fill);
+  box-shadow: 0 0 0 0 var(--accent-wash), var(--hero-shadow);
+  transition: transform .45s cubic-bezier(.2, .8, .3, 1), box-shadow .45s cubic-bezier(.2, .8, .3, 1);
+}
+.hero__portrait:hover .hero__photo {
+  transform: translateY(-3px) scale(1.015);
+  box-shadow: 0 0 0 9px var(--accent-wash), var(--hero-shadow);
+}
+
+/* Availability signal — rendered only when data.js says so. */
+.hero__avail {
+  position: absolute;
+  right: 5px; bottom: 5px;
+  width: 15px; height: 15px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: 3px solid var(--ground);
+  cursor: default;
+}
+.hero__avail::before {
+  content: "";
+  position: absolute; inset: -2px;
+  border-radius: 50%;
+  border: 1.5px solid var(--accent);
+  animation: hero-ping 2.8s cubic-bezier(.2, .7, .3, 1) infinite;
+}
+
+@keyframes hero-ping {
+  0% { transform: scale(1); opacity: .85; }
+  70%, 100% { transform: scale(2.1); opacity: 0; }
+}
+
+/* ---------- copy ---------- */
+
+.hero__text { display: flex; flex-direction: column; gap: 16px; max-width: 580px; }
+
+.hero__name {
+  font: 800 clamp(42px, 6.6vw, 64px)/.84 Archivo, sans-serif;
+  letter-spacing: -.04em;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.hero__tags { display: flex; gap: 8px; flex-wrap: wrap; }
+.hero__tags .pill {
+  transition: border-color .2s ease, transform .2s ease, background-color .2s ease;
+}
+.hero__tags .pill:hover { transform: translateY(-1px); border-color: var(--accent); }
+
+.hero__bio-wrap { display: flex; flex-direction: column; gap: 9px; align-items: flex-start; }
+
+.hero__bio { max-width: 560px; }
+
+/* Collapsed state is added by script, so a page without JS still shows
+   the whole paragraph rather than a permanently cut-off one. */
+.hero__bio.is-clamped {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  overflow: hidden;
+}
+/* Only while the toggle is mid-flight; otherwise the paragraph is
+   left to size itself. */
+.hero__bio.is-sliding {
+  overflow: hidden;
+  transition: max-height .42s cubic-bezier(.4, 0, .2, 1);
+}
+
+.hero__more {
+  display: inline-flex; align-items: center; gap: 6px;
+  align-self: start;
+  background: none;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  padding: 0 0 2px;
+  font: 700 11px Archivo, sans-serif; letter-spacing: .08em; text-transform: uppercase;
+  color: var(--fg-dim);
+  cursor: pointer;
+  transition: color .2s ease, border-color .2s ease;
+}
+.hero__more:hover { color: var(--accent-text); border-color: var(--accent); }
+.hero__more-i {
+  width: 11px; height: 11px;
+  fill: currentColor;
+  transition: transform .32s cubic-bezier(.2, .8, .3, 1);
+}
+.hero__more[aria-expanded="true"] .hero__more-i { transform: rotate(180deg); }
+
+/* ---------- actions ---------- */
+
+.hero__actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-top: 2px; }
+
+.hero .btn {
+  position: relative;
+  transition:
+    background-color .18s ease, border-color .18s ease, color .18s ease,
+    transform .22s cubic-bezier(.2, .8, .3, 1), box-shadow .22s ease;
+}
+.hero .btn:hover { transform: translateY(-2px); box-shadow: var(--hero-lift); }
+.hero .btn:active { transform: translateY(0); box-shadow: none; }
+
+.hero .btn--icon:hover { background: var(--accent-wash); border-color: var(--accent); color: var(--accent-text); }
+
+.hero__cta-i {
+  width: 15px; height: 15px;
+  fill: currentColor;
+  transition: transform .28s cubic-bezier(.2, .8, .3, 1);
+}
+.hero__cta:hover .hero__cta-i { transform: translateY(2px); }
+
+/* Light sweep on the one primary action — clipped here only, so the
+   icon buttons beside it can still show their tooltips. */
+.hero__cta { overflow: hidden; }
+.hero__cta::after {
+  content: "";
+  position: absolute; inset: 0;
+  background: linear-gradient(105deg, transparent 32%, rgba(255, 255, 255, .34) 50%, transparent 68%);
+  transform: translateX(-130%);
+  pointer-events: none;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .hero__cta:hover::after { transition: transform .75s ease; transform: translateX(130%); }
+}
+
+.hero__copy .hero__copy-ok { display: none; }
+.hero__copy.is-done { border-color: var(--accent); background: var(--accent-wash); color: var(--accent-text); }
+.hero__copy.is-done .hero__copy-i { display: none; }
+.hero__copy.is-done .hero__copy-ok { display: block; animation: hero-pop .32s cubic-bezier(.2, .8, .3, 1); }
+
+@keyframes hero-pop {
+  0% { transform: scale(.5); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* ---------- scroll cue ---------- */
+
+.hero__scroll {
+  display: inline-flex;
+  align-self: start;
+  justify-self: start;
+  grid-column: 1 / -1;
+  text-decoration: none;
+  color: var(--fg-dim);
+  margin-top: auto;
+  background: var(--hero-surface);
+  transition: opacity .35s ease, transform .28s cubic-bezier(.2, .8, .3, 1),
+              border-color .2s ease, color .2s ease, visibility .35s;
+}
+.hero__scroll:hover { border-color: var(--accent); color: var(--accent-text); transform: translateY(2px); }
+.hero__scroll-i { transition: transform .5s cubic-bezier(.2, .8, .3, 1); }
+.hero__scroll:hover .hero__scroll-i { transform: translateY(3px); }
+.hero__scroll.is-gone { opacity: 0; visibility: hidden; transform: translateY(8px); }
+
+@media (prefers-reduced-motion: no-preference) {
+  .hero__scroll-i { animation: hero-nudge 2.6s ease-in-out infinite; }
+}
+@keyframes hero-nudge {
+  0%, 72%, 100% { transform: translateY(0); }
+  84% { transform: translateY(3px); }
+}
+
+/* ---------- tooltips (hero only) ---------- */
+
+:where(.hero [data-tip]) { position: relative; }
+
+@media (hover: hover) and (pointer: fine) {
+  .hero [data-tip]::after {
+    content: attr(data-tip);
+    position: absolute;
+    left: 50%; bottom: calc(100% + 9px);
+    transform: translate(-50%, 4px);
+    z-index: 6;
+    padding: 5px 9px;
+    background: var(--hero-pop);
+    color: var(--fg);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    box-shadow: var(--hero-shadow);
+    font: 600 11px/1.2 Archivo, sans-serif;
+    letter-spacing: .03em;
+    text-transform: none;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .18s ease, transform .18s ease;
+  }
+  .hero [data-tip]:hover::after,
+  .hero [data-tip]:focus-visible::after { opacity: 1; transform: translate(-50%, 0); }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   github: live activity, in the hero
+   ═══════════════════════════════════════════════════════════════ */
+
+.gh {
+  position: relative;
+  min-width: 0;
+  display: flex; flex-direction: column; gap: 12px;
+  padding: 15px;
+  border: 1px solid var(--line-soft);
+  border-radius: 8px;
+  background: var(--hero-surface);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  box-shadow: var(--hero-shadow);
+  --gh-gap: clamp(2px, .28vw, 4px);
+  scroll-margin-top: 78px;
+  transition: border-color .3s ease;
+}
+.gh:hover { border-color: var(--line); }
+
+.gh__head {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px; flex-wrap: wrap;
+}
+.gh__head-tools { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+
+.gh__handle {
+  font: 700 11px Archivo, sans-serif; letter-spacing: .08em; text-transform: uppercase;
+  color: var(--fg-dim);
+  text-decoration: none;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 1px;
+  transition: color .2s ease, border-color .2s ease;
+}
+.gh__handle:hover { color: var(--accent-text); border-color: var(--accent); }
+
+/* live indicator */
+.gh__live {
+  display: inline-flex; align-items: center; gap: 7px;
+  font: 600 10px Archivo, sans-serif; letter-spacing: .08em; text-transform: uppercase;
+  color: var(--fg-dim);
+  border: 1px solid var(--line); border-radius: 20px;
+  padding: 5px 11px;
+  margin: 0;
+  white-space: nowrap;
+  transition: border-color .3s ease, color .3s ease;
+}
+.gh__dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--fg-faint);
+  flex: none;
+}
+.gh__live[data-state="on"] { border-color: var(--accent); color: var(--accent-text); }
+.gh__live[data-state="on"] .gh__dot { background: var(--accent); animation: gh-pulse 2.4s ease-in-out infinite; }
+.gh__live[data-state="loading"] .gh__dot { background: var(--accent); opacity: .6; animation: gh-pulse 1s ease-in-out infinite; }
+.gh__live[data-state="stale"] .gh__dot { background: var(--fg-faint); }
+.gh__live[data-state="off"] { opacity: .8; }
+
+@keyframes gh-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 var(--accent-wash); opacity: 1; }
+  50% { box-shadow: 0 0 0 5px transparent; opacity: .55; }
+}
+
+/* manual poll */
+.gh__refresh {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 26px; height: 26px; padding: 0;
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  color: var(--fg-dim);
+  cursor: pointer;
+  transition: color .2s ease, border-color .2s ease, background-color .2s ease, transform .2s ease;
+}
+.gh__refresh svg { width: 13px; height: 13px; fill: currentColor; }
+.gh__refresh:hover { color: var(--accent-text); border-color: var(--accent); background: var(--accent-wash); }
+.gh__refresh:active { transform: scale(.92); }
+.gh__refresh[disabled] { cursor: default; opacity: .7; }
+.gh__refresh.is-busy svg { animation: gh-spin .9s linear infinite; }
+
+@keyframes gh-spin { to { transform: rotate(360deg); } }
+
+/* ---------- stat tiles ---------- */
+
+.gh__stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(96px, 1fr));
+  gap: 8px;
+}
+.gh__stat {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--line-soft);
+  border-radius: 5px;
+  background: var(--hero-raised);
+  padding: 9px 10px 8px;
+  display: flex; flex-direction: column; gap: 1px;
+  min-width: 0;
+  transition: transform .26s cubic-bezier(.2, .8, .3, 1), border-color .26s ease, box-shadow .26s ease;
+}
+.gh__stat::after {
+  content: "";
+  position: absolute; left: 0; right: 0; bottom: 0; height: 2px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform .34s cubic-bezier(.2, .8, .3, 1);
+}
+.gh__stat:hover { transform: translateY(-3px); border-color: var(--line); box-shadow: var(--hero-lift); }
+.gh__stat:hover::after { transform: scaleX(1); }
+
+.gh__stat-n {
+  font: 800 clamp(17px, 1.4vw, 22px)/1 Archivo, sans-serif;
+  letter-spacing: -.03em;
+  color: var(--accent-text);
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+}
+.gh__stat-s { font-size: .62em; font-weight: 700; letter-spacing: 0; margin-left: 2px; }
+.gh__stat-l {
+  font: 700 9px Archivo, sans-serif; letter-spacing: .12em; text-transform: uppercase;
+  margin: 0; color: var(--fg);
+}
+.gh__stat-h { font-size: 10px; color: var(--fg-faint); margin: 0; min-height: 14px; }
+
+.gh__stat.is-bumped .gh__stat-n { animation: gh-bump .55s cubic-bezier(.2, .8, .3, 1); }
+@keyframes gh-bump {
+  0% { transform: none; }
+  32% { transform: translateY(-3px) scale(1.07); }
+  100% { transform: none; }
+}
+
+/* ---------- graph card ---------- */
+
+.gh__card {
+  border: 1px solid var(--line-soft);
+  border-radius: 5px;
+  background: var(--hero-raised);
+  padding: 12px;
+  display: flex; flex-direction: column; gap: 10px;
+  min-width: 0;
+}
+
+/* The wrapper carries the edge fades; the child does the scrolling. */
+.gh__scrollwrap { position: relative; min-width: 0; }
+.gh__scrollwrap::before,
+.gh__scrollwrap::after {
+  content: "";
+  position: absolute; top: 0; bottom: 0; width: 34px;
+  z-index: 2;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .25s ease;
+}
+.gh__scrollwrap::before { left: 0; background: linear-gradient(to right, var(--hero-fade), transparent); }
+.gh__scrollwrap::after { right: 0; background: linear-gradient(to left, var(--hero-fade), transparent); }
+.gh__scrollwrap.has-start::before { opacity: 1; }
+.gh__scrollwrap.has-end::after { opacity: 1; }
+
+.gh__scroll { overflow-x: auto; overflow-y: hidden; padding-bottom: 4px; scrollbar-width: thin; }
+
+/* One grid for the cells, one for the month labels, one for the weekday labels —
+   all three share --gh-weeks and --gh-gap, so the columns line up. */
+.gh__chart {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  grid-template-rows: auto auto;
+  gap: 5px 8px;
+  min-width: 430px;
+}
+
+.gh__months {
+  grid-area: 1 / 2;
+  display: grid;
+  grid-template-columns: repeat(var(--gh-weeks, 53), minmax(0, 1fr));
+  gap: var(--gh-gap);
+  font: 600 10px Archivo, sans-serif;
+  color: var(--fg-faint);
+}
+.gh__months span { overflow: hidden; white-space: nowrap; }
+
+.gh__days {
+  grid-area: 2 / 1;
+  display: grid;
+  grid-template-rows: repeat(7, minmax(0, 1fr));
+  gap: var(--gh-gap);
+  font: 600 10px Archivo, sans-serif;
+  color: var(--fg-faint);
+}
+/* Zero line-height: the labels centre on their row without making the
+   column taller than the cells beside it. */
+.gh__days span { display: flex; align-items: center; min-height: 0; line-height: 0; }
+
+.gh__grid {
+  grid-area: 2 / 2;
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-rows: repeat(7, 1fr);
+  grid-auto-columns: minmax(0, 1fr);
+  gap: var(--gh-gap);
+  /* Square-ish cells at any width, no magic pixel size. */
+  aspect-ratio: calc(var(--gh-weeks, 53) / 7);
+}
+
+.gh__cell {
+  position: relative;
+  border-radius: 2px;
+  background: var(--fill-strong);
+  transition: background-color .25s ease, transform .18s cubic-bezier(.2, .8, .3, 1),
+              box-shadow .18s ease, opacity .22s ease;
+}
+.gh__cell[data-level="1"] { background: rgba(255, 183, 77, .3); }
+.gh__cell[data-level="2"] { background: rgba(255, 183, 77, .55); }
+.gh__cell[data-level="3"] { background: rgba(255, 183, 77, .8); }
+.gh__cell[data-level="4"] { background: var(--accent); }
+.gh__cell.is-void { background: transparent; }
+.gh__cell.is-today { outline: 1.5px solid var(--accent); outline-offset: 1px; }
+.gh__cell.is-fresh { animation: gh-land 1.6s ease-out 3; }
+
+.gh__grid .gh__cell:not(.is-void):hover,
+.gh__grid .gh__cell.is-picked {
+  transform: scale(1.5);
+  box-shadow: 0 0 0 1px var(--accent);
+  z-index: 3;
+}
+
+/* Legend hover isolates one intensity across the whole year. */
+.gh__grid[data-dim] .gh__cell { opacity: .13; }
+.gh__grid[data-dim="0"] .gh__cell[data-level="0"],
+.gh__grid[data-dim="1"] .gh__cell[data-level="1"],
+.gh__grid[data-dim="2"] .gh__cell[data-level="2"],
+.gh__grid[data-dim="3"] .gh__cell[data-level="3"],
+.gh__grid[data-dim="4"] .gh__cell[data-level="4"] { opacity: 1; }
+
+/* First paint only: the year fills in left to right. */
+@media (prefers-reduced-motion: no-preference) {
+  .gh__grid.is-first .gh__cell {
+    animation: gh-cell-in .42s cubic-bezier(.2, .8, .3, 1) backwards;
+    animation-delay: calc(var(--col, 0) * 8ms);
+  }
+}
+@keyframes gh-cell-in {
+  from { opacity: 0; transform: scale(.4); }
+  to { opacity: 1; transform: none; }
+}
+
+/* The dark-theme amber is too pale on the cream panel; go deeper in light mode
+   so level 1 still separates from an empty day. */
+[data-theme="light"] .gh__cell[data-level="1"] { background: rgba(138, 75, 0, .26); }
+[data-theme="light"] .gh__cell[data-level="2"] { background: rgba(138, 75, 0, .5); }
+[data-theme="light"] .gh__cell[data-level="3"] { background: rgba(138, 75, 0, .74); }
+[data-theme="light"] .gh__cell[data-level="4"] { background: rgba(138, 75, 0, .95); }
+
+@keyframes gh-land {
+  0% { transform: scale(1); }
+  35% { transform: scale(1.55); }
+  100% { transform: scale(1); }
+}
+
+/* day tooltip */
+.gh__tip {
+  position: absolute;
+  left: 0; top: 0;
+  z-index: 8;
+  padding: 6px 10px;
+  background: var(--hero-pop);
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  box-shadow: var(--hero-shadow);
+  font: 600 11px/1.35 Archivo, sans-serif;
+  color: var(--fg);
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .16s ease;
+}
+.gh__tip.is-on { opacity: 1; }
+.gh__tip b { color: var(--accent-text); font-weight: 800; }
+.gh__tip span { display: block; color: var(--fg-faint); font-weight: 600; font-size: 10px; letter-spacing: .04em; }
+
+.gh__foot {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+  border-top: 1px solid var(--line-soft);
+  padding-top: 10px;
+  margin-top: auto;
+}
+.gh__legend { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; color: var(--fg-faint); margin: 0; }
+.gh__legend .gh__cell {
+  width: 11px; height: 11px;
+  padding: 0;
+  border: 0;
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+}
+.gh__legend .gh__cell:hover,
+.gh__legend .gh__cell.is-on { transform: scale(1.25); box-shadow: 0 0 0 1px var(--accent); }
+
+/* Between the mobile breakpoint and a comfortable two-column hero, the panel
+   drops under the identity block rather than squeezing both. */
+@media (max-width: 1240px) {
+  .hero__in { grid-template-columns: minmax(0, 1fr); gap: 30px; }
+}
+
+/* ---------- projects ---------- */
+
+.projects { border-bottom: 1px solid var(--line-soft); padding-block: 34px 40px; }
+
+.projects__head { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; margin-bottom: 22px; }
+
+.projects__list { display: flex; flex-direction: column; gap: 20px; list-style: none; margin: 0; padding: 0; }
+
+.pcard {
+  display: grid;
+  grid-template-columns: minmax(0, 420px) minmax(0, 1fr);
+  gap: 22px;
+  border: 1px solid var(--line);
+  padding: 18px;
+  cursor: pointer;
+  transition:
+    transform .35s cubic-bezier(.34, 1.8, .5, 1),
+    box-shadow .35s cubic-bezier(.34, 1.8, .5, 1),
+    border-color .2s ease;
+}
+/* Doodle box: on hover the card springs up-right and grows a solid black side.
+   The 1px steps join the corners into one extruded block; the last two steps ink its edge. */
+@media (hover: hover) {
+  .projects__list .pcard:hover {
+    transform: translate(6px, -6px);
+    border-color: var(--fg);
+    box-shadow:
+      -1px 1px 0 #000, -2px 2px 0 #000, -3px 3px 0 #000, -4px 4px 0 #000, -5px 5px 0 #000,
+      -6px 6px 0 #000, -7px 7px 0 #000, -8px 8px 0 #000, -9px 9px 0 #000, -10px 10px 0 #000,
+      -11px 11px 0 var(--fg), -12px 12px 0 var(--fg);
+  }
+}
+.pcard:nth-child(even) { grid-template-columns: minmax(0, 1fr) minmax(0, 420px); }
+.pcard:nth-child(even) .pcard__media { order: 2; }
+
+.pcard__media { display: flex; flex-direction: column; gap: 7px; min-width: 0; }
+
+.pcard__frame {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  border: 1px solid var(--line);
+  background: var(--fill);
+  overflow: hidden;
+}
+.pcard__frame video, .pcard__frame img { width: 100%; height: 100%; object-fit: cover; }
+
+.pcard__poster {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--fill);
+}
+.pcard__poster::after {
+  content: "";
+  width: 46px; height: 46px; border-radius: 50%;
+  border: 2px solid var(--accent);
+  background: var(--panel);
+  opacity: .75;
+}
+
+.pcard__frame--slides { display: block; cursor: pointer; }
+
+.pcard__foot { display: flex; align-items: center; justify-content: flex-end; gap: 12px; min-height: 20px; }
+
+.bdots { display: flex; align-items: center; gap: 7px; flex: none; }
+.bdots__dot {
+  position: relative;
+  width: 8px; height: 8px; padding: 0;
+  border: 1px solid var(--line); border-radius: 8px;
+  background: transparent;
+  cursor: pointer;
+  transition: width .4s ease, background-color .3s ease, border-color .3s ease;
+}
+.bdots__dot::before { content: ""; position: absolute; inset: -10px -4px; }
+.bdots__dot:hover { border-color: var(--accent); }
+.bdots__dot.is-active { width: 24px; background: var(--accent); border-color: var(--accent); }
+
+.pcard__body { display: flex; flex-direction: column; gap: 11px; min-width: 0; }
+.pcard__summary { display: flex; flex-direction: column; gap: 10px; }
+.pcard__summary strong { color: var(--fg); font-weight: 600; }
+
+.pcard__title {
+  font: 800 clamp(20px, 2.4vw, 26px)/1.05 Archivo, sans-serif;
+  letter-spacing: -.02em;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+
+.pcard__actions { display: flex; gap: 9px; flex-wrap: wrap; margin-top: auto; padding-top: 4px; }
+
+/* ---------- contact ---------- */
+
+.contact { padding-block: 34px 48px; }
+
+.contact__in {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: 32px;
+  align-items: start;
+}
+
+.contact__copy { display: flex; flex-direction: column; gap: 14px; max-width: 420px; }
+.contact__actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-top: 4px; }
+
+@media (min-width: 861px) {
+  .contact__chat { position: sticky; top: 78px; }
+}
+
+/* ---------- mobile (3b) ---------- */
+
+@media (max-width: 860px) {
+  .hero__in {
+    grid-template-columns: 1fr;
+    gap: 0;
+    padding-block: 30px 26px;
+    min-height: 0;
+  }
+
+  .hero__id { flex-direction: column; gap: 16px; }
+  .hero__photo { width: 104px; height: 104px; }
+  .hero__avail { width: 13px; height: 13px; right: 3px; bottom: 3px; }
+  .hero__text { gap: 13px; }
+  .hero__actions .btn--icon { width: 44px; height: 44px; }
+  .hero__scroll { display: none; }
+
+  /* The panel keeps the page width; only the chart scrolls sideways. */
+  .gh { margin-top: 24px; padding: 12px; gap: 10px; }
+  .gh__stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .gh__stat:last-child:nth-child(odd) { grid-column: span 2; }
+  .gh__chart { min-width: 640px; }
+  /* A tapped cell needs room to scale without clipping. */
+  .gh__grid .gh__cell.is-picked { transform: scale(1.6); }
+
+  .pcard, .pcard:nth-child(even) { grid-template-columns: 1fr; gap: 12px; padding: 12px; }
+  .pcard:nth-child(even) .pcard__media { order: 0; }
+  .pcard__actions .btn { flex: 1 1 140px; }
+
+  .contact__in { grid-template-columns: 1fr; gap: 22px; }
+
+  /* Room for the pull-up chat sheet. */
+  .contact { padding-bottom: 120px; }
+  .site-footer { padding-bottom: 110px; }
+}

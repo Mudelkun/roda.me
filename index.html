@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Your Name — Full-stack developer</title>
+<meta name="description" content="Portfolio of Your Name, a full-stack developer in Montréal. Two builds, the stack behind them, and a way to get in touch.">
+<meta name="theme-color" content="#101a16">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="Your Name — Full-stack developer">
+<meta property="og:description" content="Portfolio of Your Name, a full-stack developer in Montréal.">
+
+<link rel="icon" href="assets/media/favicon.svg" type="image/svg+xml">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/chat.css">
+<link rel="stylesheet" href="assets/css/home.css">
+<link rel="stylesheet" href="assets/css/brand.css">
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="shell site-header__in">
+    <a class="brand" href="./"><span class="brand__star" aria-hidden="true">★</span><span data-bind="profile.name">Rodarly</span></a>
+
+    <nav class="nav" id="site-nav" aria-label="Sections">
+      <a class="nav__link" href="#about">About</a>
+      <a class="nav__link" href="#activity">Activity</a>
+      <a class="nav__link" href="#projects">Projects</a>
+      <a class="nav__link" href="#contact">Contact me</a>
+    </nav>
+
+    <div class="header__tools">
+      <span class="nav__sep" aria-hidden="true"></span>
+      <button class="theme-toggle" type="button" aria-pressed="false" aria-label="Switch to light mode">
+        <span class="theme-toggle__thumb" aria-hidden="true"></span>
+        <svg class="theme-toggle__icon theme-toggle__icon--sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+        <svg class="theme-toggle__icon theme-toggle__icon--moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7z"/></svg>
+      </button>
+      <button class="burger" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- ─────────── about / hero ─────────── -->
+  <section class="hero" id="about" aria-labelledby="hero-name">
+    <div class="hero__bg" aria-hidden="true">
+      <span class="hero__grid"></span>
+      <span class="hero__aura"></span>
+      <span class="hero__spot"></span>
+      <span class="hero__grain"></span>
+      <span class="hero__veil"></span>
+    </div>
+
+    <div class="shell hero__in">
+      <div class="hero__id">
+        <div class="hero__portrait" data-reveal style="--d:.02s">
+          <img class="hero__photo" data-bind-attr="src:profile.photo" src="assets/media/portrait.jpg" alt="Portrait of Your Name" width="132" height="132">
+          <span class="hero__avail" id="hero-avail" data-tip="Open to work" hidden>
+            <span class="sr">Open to work</span>
+          </span>
+        </div>
+
+        <div class="hero__text">
+          <h1 class="hero__name" id="hero-name" data-bind="profile.name" data-reveal style="--d:.06s">Rodarly</h1>
+
+          <div class="hero__tags" data-reveal style="--d:.12s">
+            <span class="pill pill--accent" data-bind="profile.role">Full-stack developer</span>
+            <span class="pill"><svg class="pill__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7Zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5Z"/></svg><span data-bind="profile.location">Montréal, QC</span></span>
+          </div>
+
+          <div class="hero__bio-wrap" data-reveal style="--d:.18s">
+            <p class="lede hero__bio" id="hero-bio" data-bind="profile.bio">
+              Short paragraph about what you build and what you are good at.
+            </p>
+
+            <button class="hero__more" id="hero-bio-more" type="button"
+                    aria-controls="hero-bio" aria-expanded="false" hidden>
+              <span class="hero__more-t">Read more</span>
+              <svg class="hero__more-i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15.5 4.5 8l1.4-1.4L12 12.7l6.1-6.1L19.5 8Z"/></svg>
+            </button>
+          </div>
+
+          <div class="hero__actions" data-reveal style="--d:.24s">
+            <a class="btn btn--primary hero__cta" data-bind-attr="href:profile.resume" href="assets/media/resume.pdf" target="_blank" rel="noopener">
+              <span>View résumé</span>
+              <svg class="hero__cta-i" viewBox="0 0 24 24" aria-hidden="true"><path d="M11 3h2v11.2l4.1-4.1 1.4 1.4L12 18l-6.5-6.5 1.4-1.4L11 14.2Z"/><path d="M4 19h16v2H4z"/></svg>
+            </a>
+
+            <a class="btn btn--icon" id="hero-email" href="mailto:you@example.com" aria-label="Email me" data-tip="Email me">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2Zm0 4.2-8 5-8-5V6l8 5 8-5Z"/></svg>
+            </a>
+
+            <button class="btn btn--icon hero__copy" id="hero-copy" type="button" aria-label="Copy email address" data-tip="Copy address">
+              <svg class="hero__copy-i" viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12Zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2Zm0 16H8V7h11Z"/></svg>
+              <svg class="hero__copy-ok" viewBox="0 0 24 24" aria-hidden="true"><path d="M9.5 17.6 4 12.1l1.6-1.6 3.9 3.9L18.4 5.5 20 7.1Z"/></svg>
+            </button>
+
+            <a class="btn btn--icon" data-bind-attr="href:profile.github" href="https://github.com/your-handle" target="_blank" rel="me noopener" aria-label="GitHub profile" data-tip="GitHub">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.9 1.53 2.36 1.09 2.94.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02a9.5 9.5 0 0 1 5 0c1.91-1.29 2.75-1.02 2.75-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0 0 12 2Z"/></svg>
+            </a>
+          </div>
+
+          <p class="sr" id="hero-copy-live" role="status"></p>
+        </div>
+      </div>
+
+      <!-- live GitHub activity -->
+      <aside class="gh" id="activity" aria-labelledby="gh-title" data-reveal style="--d:.3s">
+
+        <div class="gh__head">
+          <h2 class="h-sub" id="gh-title">Commit history &middot; live</h2>
+          <div class="gh__head-tools">
+            <p class="gh__live" id="gh-live" data-state="loading" role="status">
+              <span class="gh__dot" aria-hidden="true"></span>
+              <span id="gh-status">Reading GitHub&hellip;</span>
+            </p>
+            <button class="gh__refresh" id="gh-refresh" type="button" aria-label="Refresh activity now" data-tip="Refresh now">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5V2L7.5 6.5 12 11V8a5 5 0 1 1-5 5H5a7 7 0 1 0 7-8Z"/></svg>
+            </button>
+            <a class="gh__handle" id="gh-handle" href="https://github.com/Mudelkun" target="_blank" rel="me noopener">@Mudelkun</a>
+          </div>
+        </div>
+
+        <div class="gh__stats" id="gh-stats">
+          <div class="gh__stat"><p class="gh__stat-n">&mdash;</p><p class="gh__stat-l">Contributions</p><p class="gh__stat-h">last 12 months</p></div>
+          <div class="gh__stat"><p class="gh__stat-n">&mdash;</p><p class="gh__stat-l">Today</p></div>
+          <div class="gh__stat"><p class="gh__stat-n">&mdash;</p><p class="gh__stat-l">Current streak</p></div>
+          <div class="gh__stat"><p class="gh__stat-n">&mdash;</p><p class="gh__stat-l">Longest streak</p></div>
+          <div class="gh__stat"><p class="gh__stat-n">&mdash;</p><p class="gh__stat-l">Last 30 days</p></div>
+        </div>
+
+        <div class="gh__card gh__card--graph">
+          <div class="gh__scrollwrap" id="gh-scrollwrap">
+            <div class="gh__scroll" id="gh-scroll">
+              <div class="gh__chart">
+                <div class="gh__months" id="gh-months" aria-hidden="true"></div>
+                <div class="gh__days" aria-hidden="true">
+                  <span></span><span>Mon</span><span></span><span>Wed</span><span></span><span>Fri</span><span></span>
+                </div>
+                <div class="gh__grid" id="gh-grid" role="img" aria-label="GitHub contribution graph for the last 12 months"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="gh__foot">
+            <p class="note" id="gh-total">Last 12 months</p>
+            <p class="gh__legend" id="gh-legend"><span>Less</span>
+              <button class="gh__cell" type="button" data-level="0" aria-label="Highlight days with no contributions"></button>
+              <button class="gh__cell" type="button" data-level="1" aria-label="Highlight days with low activity"></button>
+              <button class="gh__cell" type="button" data-level="2" aria-label="Highlight days with medium activity"></button>
+              <button class="gh__cell" type="button" data-level="3" aria-label="Highlight days with high activity"></button>
+              <button class="gh__cell" type="button" data-level="4" aria-label="Highlight days with very high activity"></button>
+              <span>More</span>
+            </p>
+          </div>
+        </div>
+
+        <noscript>
+          <p class="note">The live graph needs JavaScript &mdash; the profile itself is at
+            <a href="https://github.com/Mudelkun" target="_blank" rel="noopener">github.com/Mudelkun</a>.</p>
+        </noscript>
+      </aside>
+
+      <a class="pill hero__scroll" id="hero-scroll" href="#projects">
+        <span class="hero__scroll-i" aria-hidden="true">↓</span> Scroll for projects
+      </a>
+    </div>
+  </section>
+  <!-- ─────────── projects ─────────── -->
+  <section class="projects" id="projects" aria-labelledby="projects-title">
+    <div class="shell">
+      <div class="projects__head">
+        <h2 class="h-sec" id="projects-title">Projects</h2>
+        <p class="note">Two builds, with demo video.</p>
+      </div>
+
+      <ul class="projects__list" id="projects-list">
+        <li class="note">Loading projects…</li>
+      </ul>
+
+      <noscript>
+        <p class="note">The project list needs JavaScript. The write-ups live at
+          <a href="project.html?p=project-one">Project One</a> and
+          <a href="project.html?p=project-two">Project Two</a>.</p>
+      </noscript>
+    </div>
+  </section>
+
+  <!-- ─────────── contact + chat ─────────── -->
+  <section class="contact" id="contact" aria-labelledby="contact-title">
+    <div class="shell contact__in">
+      <div class="contact__copy">
+        <h2 class="h-sec" id="contact-title">Contact me</h2>
+        <p class="lede" data-bind="profile.contactBlurb">
+          Open to full-time roles and interesting contract work.
+        </p>
+
+        <div class="contact__actions">
+          <a class="btn btn--icon" id="contact-email" href="mailto:you@example.com" aria-label="Email me">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2Zm0 4.2-8 5-8-5V6l8 5 8-5Z"/></svg>
+          </a>
+          <a class="btn btn--icon" data-bind-attr="href:profile.github" href="https://github.com/your-handle" target="_blank" rel="me noopener" aria-label="GitHub profile">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.9 1.53 2.36 1.09 2.94.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02a9.5 9.5 0 0 1 5 0c1.91-1.29 2.75-1.02 2.75-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0 0 12 2Z"/></svg>
+          </a>
+          <a class="btn btn--ghost" id="contact-hello" href="mailto:you@example.com">Say hello</a>
+        </div>
+      </div>
+
+      <div class="contact__chat" id="chat-mount"></div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer shell">
+  <p>© <span id="year">2026</span> <span data-bind="profile.name">Your Name</span></p>
+  <p>Built from a wireframe. <a data-bind-attr="href:profile.github" href="https://github.com/your-handle" target="_blank" rel="noopener">Source</a></p>
+</footer>
+
+<script src="assets/js/data.js"></script>
+<script src="assets/js/ui.js"></script>
+<script src="assets/js/brand.js"></script>
+<script src="assets/js/github.js"></script>
+<script src="assets/js/chat.js"></script>
+<script src="assets/js/hero.js"></script>
+<script src="assets/js/home.js"></script>
+</body>
+</html>
