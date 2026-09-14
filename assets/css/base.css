@@ -36,6 +36,8 @@
   --brand-shadow: rgb(0 0 0 / .7);
   --brand-sheen: rgb(246 241 228 / .04);
 
+  --btn-lift: 0 14px 30px -20px rgba(0, 0, 0, .8);
+
   --shell: 1440px;
   --gut: 28px;
 
@@ -75,6 +77,8 @@
   --brand-surface-alt: #ece4d2;
   --brand-shadow: rgb(70 50 20 / .2);
   --brand-sheen: rgb(255 255 255 / .6);
+
+  --btn-lift: 0 14px 28px -20px rgba(74, 52, 16, .38);
 
   color-scheme: light;
 }
@@ -182,13 +186,30 @@ a { color: inherit; }
   padding: 11px 16px;
   min-height: 44px;
   cursor: pointer;
-  transition: background .15s ease, border-color .15s ease, color .15s ease, transform .15s ease;
+  position: relative;
+  transition:
+    background-color .18s ease, border-color .18s ease, color .18s ease,
+    transform .22s cubic-bezier(.2, .8, .3, 1), box-shadow .22s ease;
 }
-.btn:hover { border-color: var(--accent); color: var(--accent-text); }
-.btn:active { transform: translateY(1px); }
+.btn:hover { border-color: var(--accent); color: var(--accent-text); transform: translateY(-2px); box-shadow: var(--btn-lift); }
+.btn:active { transform: translateY(0); box-shadow: none; }
 
 .btn--primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
 .btn--primary:hover { background: var(--accent); color: var(--accent-ink); filter: brightness(1.08); }
+
+/* Light sweep across primary actions - clipped on these only, so icon buttons
+   elsewhere can still show their tooltips. */
+.btn--primary { overflow: hidden; }
+.btn--primary::after {
+  content: "";
+  position: absolute; inset: 0;
+  background: linear-gradient(105deg, transparent 32%, rgba(255, 255, 255, .34) 50%, transparent 68%);
+  transform: translateX(-130%);
+  pointer-events: none;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .btn--primary:hover::after { transition: transform .75s ease; transform: translateX(130%); }
+}
 
 .btn--ghost { border-color: var(--accent); color: var(--accent-text); }
 
@@ -354,4 +375,117 @@ a { color: inherit; }
   padding-block: 22px 28px;
   display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between;
   font-size: 13px; color: var(--fg-faint);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   hero ground - shared by the one-pager hero and the project hero
+   The section paints its own ground: a masked blueprint grid, a
+   fixed ambient wash, a pointer-tracked spot, a grain pass and a
+   veil that dissolves into the page below. hero.js drives the spot
+   and the entrance stagger.
+   ═══════════════════════════════════════════════════════════════ */
+
+:is(.hero, .phero) {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border-bottom: 1px solid var(--line-soft);
+  background-color: var(--ground);
+
+  --hero-aura: rgba(255, 183, 77, .13);
+  --hero-spot: rgba(255, 183, 77, .1);
+  --hero-grid: rgba(246, 241, 228, .05);
+  --hero-rule: rgba(246, 241, 228, .1);
+  --hero-surface: rgba(255, 255, 255, .028);
+  --hero-raised: rgba(255, 255, 255, .05);
+  --hero-fade: #14211b;
+  --hero-pop: #1d2b24;
+  --hero-shadow: 0 20px 44px -32px rgba(0, 0, 0, .95);
+  --hero-lift: 0 14px 30px -20px rgba(0, 0, 0, .8);
+  --grain-opacity: .16;
+}
+
+[data-theme="light"] :is(.hero, .phero) {
+  --hero-aura: rgba(217, 130, 12, .16);
+  --hero-spot: rgba(217, 130, 12, .12);
+  --hero-grid: rgba(16, 26, 22, .05);
+  --hero-rule: rgba(16, 26, 22, .09);
+  --hero-surface: rgba(255, 253, 247, .66);
+  --hero-raised: rgba(255, 253, 247, .95);
+  --hero-fade: #f5efe1;
+  --hero-pop: #fffdf7;
+  --hero-shadow: 0 20px 44px -34px rgba(74, 52, 16, .5);
+  --hero-lift: 0 14px 28px -20px rgba(74, 52, 16, .38);
+  --grain-opacity: .05;
+}
+
+/* ---------- background stack ---------- */
+
+.hero__bg { position: absolute; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+.hero__bg > * { position: absolute; inset: 0; display: block; }
+
+/* Blueprint grid, faded out toward the edges so it reads as depth
+   rather than as graph paper laid over the whole band. */
+.hero__grid {
+  background-image:
+    linear-gradient(to right, var(--hero-grid) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--hero-grid) 1px, transparent 1px);
+  background-size: 76px 76px;
+  background-position: center top;
+  -webkit-mask-image: radial-gradient(115% 92% at 50% 6%, #000 30%, rgba(0, 0, 0, .35) 62%, transparent 88%);
+  mask-image: radial-gradient(115% 92% at 50% 6%, #000 30%, rgba(0, 0, 0, .35) 62%, transparent 88%);
+}
+
+/* Static warmth behind the identity block. */
+.hero__aura {
+  background:
+    radial-gradient(560px 420px at 14% 8%, var(--hero-aura), transparent 68%),
+    radial-gradient(680px 460px at 88% 96%, var(--hero-aura), transparent 72%);
+}
+
+/* Pointer-tracked light. Sized once, moved with a transform, so the
+   only thing that changes per frame is the compositor matrix. */
+.hero__spot {
+  inset: auto auto auto 0;
+  top: 0;
+  width: 620px; height: 620px;
+  border-radius: 50%;
+  background: radial-gradient(circle closest-side, var(--hero-spot), transparent 100%);
+  opacity: 0;
+  transition: opacity .55s ease;
+  will-change: transform;
+}
+:is(.hero, .phero).is-tracking .hero__spot { opacity: 1; }
+
+.hero__grain {
+  opacity: var(--grain-opacity);
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E");
+}
+
+/* Dissolve into whatever follows, so the band has a floor. */
+.hero__veil { background: linear-gradient(to bottom, transparent 52%, var(--bg) 100%); }
+
+/* Hairline highlight under the sticky header. */
+:is(.hero, .phero)::before {
+  content: "";
+  position: absolute; inset-inline: 0; top: 0; height: 1px; z-index: 1;
+  background: linear-gradient(90deg, transparent, var(--hero-rule) 22%, var(--hero-rule) 78%, transparent);
+  pointer-events: none;
+}
+
+/* ---------- entrance ---------- */
+
+@media (prefers-reduced-motion: no-preference) {
+  :is(.hero, .phero).can-reveal [data-reveal] {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  :is(.hero, .phero).is-ready [data-reveal] {
+    opacity: 1;
+    transform: none;
+    transition:
+      opacity .72s cubic-bezier(.22, .61, .36, 1) var(--d, 0s),
+      transform .72s cubic-bezier(.22, .61, .36, 1) var(--d, 0s);
+  }
 }

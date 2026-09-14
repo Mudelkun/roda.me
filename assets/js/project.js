@@ -27,7 +27,6 @@
   function pills(items) {
     return items.map(function (t) { return '<li><span class="pill">' + esc(t) + "</span></li>"; }).join("");
   }
-
   /* ---------- sections ---------- */
 
   function sections(project) {
@@ -106,21 +105,28 @@
       '<a class="btn btn--primary" href="' + esc(project.live) + '" target="_blank" rel="noopener">Try it live →</a>' +
       (project.source ? '<a class="btn" href="' + esc(project.source) + '" target="_blank" rel="noopener">Source on GitHub</a>' : "");
 
+    /* "Name: descriptor" - the descriptor after the colon is set in the accent gradient. */
+    var title = window.Brand ? Brand.title(project.title, esc) : esc(project.title);
+
     return '' +
-      '<section class="phero ground" aria-labelledby="p-title">' +
-        '<div class="ground__roads" aria-hidden="true"><i></i><i></i><i></i></div>' +
+      '<section class="phero" aria-labelledby="p-title">' +
+        '<div class="hero__bg" aria-hidden="true">' +
+          '<span class="hero__grid"></span>' +
+          '<span class="hero__aura"></span>' +
+          '<span class="hero__spot"></span>' +
+          '<span class="hero__grain"></span>' +
+          '<span class="hero__veil"></span>' +
+        "</div>" +
         '<div class="shell phero__in">' +
           '<div class="phero__text">' +
             (project.logo
-              ? '<img class="phero__logo" src="' + esc(project.logo) + '" alt="' + esc(project.title.split(":")[0]) + ' logo" width="64" height="64">'
+              ? '<img class="phero__logo" data-reveal style="--d:.02s" src="' + esc(project.logo) + '" alt="' + esc(project.title.split(":")[0]) + ' logo" width="64" height="64">'
               : "") +
-            '<p class="eyebrow" data-brand-reveal style="--i:0">Project ' + esc(project.index) + "</p>" +
-            '<h1 class="phero__title" id="p-title" data-brand-reveal style="--i:1">' +
-              esc(project.title) + "</h1>" +
-            '<p class="lede phero__pitch" data-brand-reveal style="--i:2">' + esc(project.pitch) + "</p>" +
-            '<ul class="phero__strip stack-tags">' + pills(stripItems) + "</ul>" +
+            '<p class="eyebrow" data-reveal style="--d:.06s">Project ' + esc(project.index) + "</p>" +
+            '<h1 class="phero__title" id="p-title" data-reveal style="--d:.1s">' + title + "</h1>" +
+            '<ul class="phero__strip stack-tags" data-reveal style="--d:.2s">' + pills(stripItems) + "</ul>" +
           "</div>" +
-          '<aside class="facts" aria-label="Project facts" data-brand-reveal style="--i:2">' +
+          '<aside class="facts" aria-label="Project facts" data-reveal style="--d:.22s">' +
             '<h2 class="h-sub">The facts</h2>' +
             '<dl class="facts__rows">' + rows + "</dl>" +
             '<ul class="stack-tags">' + pills((project.tags || []).slice(0, 4)) + "</ul>" +
@@ -130,23 +136,7 @@
       "</section>";
   }
 
-  function videoBlock(project) {
-    if (!project.video) return "";
-    return '' +
-      '<section class="walkthrough" aria-label="Walkthrough video">' +
-        '<div class="shell">' +
-          '<div class="walkthrough__frame" data-frame>' +
-            '<video controls preload="metadata" playsinline poster="' + esc(project.poster || "") + '">' +
-              '<source src="' + esc(project.video) + '" type="video/mp4">' +
-            "</video>" +
-          "</div>" +
-          '<p class="note walkthrough__cap">Full walkthrough' +
-            (project.videoLength ? " · " + esc(project.videoLength) : "") + "</p>" +
-        "</div>" +
-      "</section>";
-  }
-
-  /* No walkthrough video: the screenshots take its place as a crossfading stage. */
+  /* No walkthrough video: the demo and screenshots crossfade in its place. */
   function showcaseShots(project) {
     return (project.demo ? [project.demo] : []).concat(project.screens || []);
   }
@@ -155,7 +145,23 @@
     return !project.video && showcaseShots(project).length > 0;
   }
 
-  function showcaseBlock(project) {
+  /* The media card: the walkthrough video, or the crossfading demo and screenshots. */
+  function mediaBlock(project) {
+    if (project.video) {
+      return '' +
+        '<section class="pmedia" aria-label="Walkthrough video">' +
+          '<div class="pmedia__head">' +
+            '<h2 class="h-sub">Full walkthrough</h2>' +
+            (project.videoLength ? '<span class="note">' + esc(project.videoLength) + "</span>" : "") +
+          "</div>" +
+          '<div class="pmedia__frame pmedia__frame--video" data-frame>' +
+            '<video controls preload="metadata" playsinline poster="' + esc(project.poster || "") + '">' +
+              '<source src="' + esc(project.video) + '" type="video/mp4">' +
+            "</video>" +
+          "</div>" +
+        "</section>";
+    }
+
     if (!hasShowcase(project)) return "";
     var shots = showcaseShots(project);
 
@@ -174,30 +180,38 @@
       }).join("") + "</div>" : "";
 
     return '' +
-      '<section class="showcase" aria-label="Screens" data-slides-scope>' +
-        '<div class="shell">' +
-          '<div class="showcase__stage" data-brand-reveal>' +
-            '<button class="showcase__frame" type="button" id="showcase-frame" data-frame data-slides="4200" data-tilt="3" aria-label="Enlarge screenshot">' +
-              imgs +
-            "</button>" +
-          "</div>" +
-          '<div class="showcase__bar" data-brand-reveal style="--i:1">' +
-            '<p class="note showcase__cap" data-slide-cap>' + esc(shots[0].caption || "") + "</p>" +
-            thumbs +
-          "</div>" +
+      '<section class="pmedia" aria-label="Demo" data-slides-scope>' +
+        '<div class="pmedia__head">' +
+          '<h2 class="h-sub">See it in action</h2>' +
+          '<span class="note">Click to enlarge</span>' +
+        "</div>" +
+        '<button class="pmedia__frame" type="button" id="showcase-frame" data-frame data-slides="4200" aria-label="Enlarge screenshot">' +
+          imgs +
+        "</button>" +
+        '<div class="showcase__bar">' +
+          '<p class="note showcase__cap" data-slide-cap>' + esc(shots[0].caption || "") + "</p>" +
+          thumbs +
         "</div>" +
       "</section>";
   }
 
-  function bodyBlock(project, secs) {
+  /* Media beside the write-up: the demo holds the wider column, which stays in view on
+     tall enough screens with the section links under it, and the text scrolls beside it. */
+  function stageBlock(project, secs) {
+    var media = mediaBlock(project);
+
     var main = secs.map(function (s) {
-      return '<section class="psec" id="' + esc(s.id) + '" data-brand-reveal>' +
+      return '<section class="psec" id="' + esc(s.id) + '">' +
         '<h2 class="psec__title">' + esc(s.title) + "</h2>" + s.html + "</section>";
     }).join("");
 
-    var toc = secs.map(function (s) {
-      return '<li><a href="#' + esc(s.id) + '">' + esc(s.title) + "</a></li>";
-    }).join("");
+    var toc = secs.length ? '' +
+      '<nav class="toc" id="toc" aria-labelledby="toc-title">' +
+        '<h2 class="h-sub" id="toc-title">Jump to</h2>' +
+        "<ol>" + secs.map(function (s) {
+          return '<li><a href="#' + esc(s.id) + '">' + esc(s.title) + "</a></li>";
+        }).join("") + "</ol>" +
+      "</nav>" : "";
 
     var screens = "";
     if (project.screens && project.screens.length && !hasShowcase(project)) {
@@ -214,16 +228,12 @@
     }
 
     return '' +
-      '<div class="shell pbody">' +
-        '<div class="pbody__main">' + main + "</div>" +
-        '<aside class="prail">' +
-          '<nav class="toc" id="toc" aria-labelledby="toc-title">' +
-            '<h2 class="h-sub" id="toc-title">On this page</h2>' +
-            "<ol>" + toc + "</ol>" +
-          "</nav>" +
-          screens +
+      '<div class="shell pstage' + (media ? "" : " pstage--solo") + '">' +
+        (media ? '<div class="pstage__media">' + media + toc + "</div>" : "") +
+        '<div class="pstage__text">' +
+          (media ? "" : toc) + main + screens +
           '<div id="chat-mount"></div>' +
-        "</aside>" +
+        "</div>" +
       "</div>";
   }
 
@@ -346,10 +356,10 @@
 
     var secs = sections(project);
 
-    root.innerHTML = heroBlock(project) + videoBlock(project) + showcaseBlock(project) +
-      bodyBlock(project, secs) + nextBlock(project);
+    root.innerHTML = heroBlock(project) + stageBlock(project, secs) + nextBlock(project);
     document.body.insertAdjacentHTML("beforeend", actionBar(project));
     document.body.classList.add("has-actionbar");
+    if (window.HeroFx) HeroFx.bind(root.querySelector(".phero"));
 
     UI.initBindings(root);
     UI.initMediaFallback(root);

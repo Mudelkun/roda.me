@@ -89,8 +89,9 @@ Point it at your own endpoint to get real answers: it POSTs
 - **Chat** — an inline card at ≥861px; a fixed pull-up sheet below that, expanded by tap,
   drag or focus. On the detail page the sheet stays hidden until the action bar's
   **Ask** button summons it.
-- **Detail page** — the right rail sticks while the deep-dive sections scroll, and the
-  "on this page" list highlights the current section. Below 861px the facts card becomes
+- **Detail page** — the demo sits beside the write-up: its framed card and the "jump to"
+  links stick in the wider column while the sections scroll next to it, and the link for
+  the current section is highlighted. Below 981px they stack, demo first. Below 861px the facts card becomes
   the pill strip under the title and the actions move to the sticky bottom bar (`4b`).
 - Reduced-motion preferences disable card autoplay and smooth scrolling.
 

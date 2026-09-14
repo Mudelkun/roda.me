@@ -210,7 +210,7 @@ html[data-brand] .nav__link:hover { border-color: rgb(var(--brand-accent-rgb) / 
 
 /* ---------- hero ---------- */
 
-html[data-brand] .phero.ground {
+html[data-brand] .phero {
   --mx: 22%; --my: 28%;
   background: var(--bg);
   isolation: isolate;
@@ -242,7 +242,6 @@ html[data-brand] .phero__in { padding-block: 72px 44px; gap: 48px; }
 html[data-brand] .phero__text { gap: 18px; }
 html[data-brand] .phero__title { font-size: clamp(46px, 7.2vw, 96px); line-height: .96; }
 html[data-brand] .phero__title .btitle__tail { display: block; }
-html[data-brand] .phero__pitch { font-size: clamp(16px, 1.5vw, 19px); line-height: 1.6; max-width: 560px; }
 
 html[data-brand] .facts {
   border-radius: var(--brand-radius);
@@ -259,9 +258,9 @@ html[data-brand] .facts__row dd { font-weight: 500; }
 
 /* ---------- showcase ---------- */
 
-html[data-brand] .showcase { border-bottom-color: var(--line-soft); padding-block: 4px 56px; }
+html[data-brand] .pmedia { border-radius: calc(var(--brand-radius) + 4px); border-color: var(--line-soft); background: var(--brand-surface); }
 
-html[data-brand] .showcase__frame {
+html[data-brand] .pmedia__frame {
   border-radius: calc(var(--brand-radius) + 4px);
   border-color: var(--line);
   background: var(--brand-surface);
@@ -270,7 +269,7 @@ html[data-brand] .showcase__frame {
   transition: transform .9s var(--brand-ease), box-shadow .6s var(--brand-ease);
   will-change: transform;
 }
-html[data-brand] .showcase__frame.is-pointer { transition: transform .2s linear, box-shadow .6s var(--brand-ease); }
+html[data-brand] .pmedia__frame.is-pointer { transition: transform .2s linear, box-shadow .6s var(--brand-ease); }
 
 html[data-brand] .showcase__bar { margin-top: 18px; }
 html[data-brand] .showcase__cap { color: var(--fg-dim); font-size: 14px; transition: opacity .4s ease; }
@@ -287,8 +286,8 @@ html[data-brand] .showcase__thumb.is-active {
 
 /* ---------- body ---------- */
 
-html[data-brand] .pbody { padding-block: 56px 64px; gap: 56px; }
-html[data-brand] .pbody__main { gap: 52px; }
+html[data-brand] .pstage { padding-block: 56px 64px; }
+html[data-brand] .pstage__text { gap: 52px; }
 html[data-brand] .psec { gap: 16px; }
 html[data-brand] .psec__title { font-size: clamp(28px, 3vw, 38px); line-height: 1.05; }
 html[data-brand] .psec p { font-size: 16px; line-height: 1.75; }
@@ -331,15 +330,8 @@ html[data-brand] .psec .layer__why { font-size: 14px; line-height: 1.6; color: v
 
 /* ---------- rail ---------- */
 
-html[data-brand] .toc a {
-  transition: color .3s ease, padding-left .5s var(--brand-ease), border-color .3s ease;
-}
-html[data-brand] .toc a:hover { color: var(--fg); padding-left: 16px; }
-html[data-brand] .toc a[aria-current="true"] {
-  color: var(--fg);
-  padding-left: 16px;
-  border-image: linear-gradient(to bottom, var(--accent), var(--brand-accent-2)) 1;
-}
+html[data-brand] .toc a { transition: color .3s ease, border-color .3s ease, background-color .3s ease; }
+html[data-brand] .toc a[aria-current="true"] { color: var(--fg); border-color: rgb(var(--brand-accent-rgb) / .6); }
 
 html[data-brand] .chat {
   border-width: 1px;
@@ -375,8 +367,7 @@ html[data-brand] .lightbox[open] .lightbox__in { animation: brand-pop .5s var(--
 
 @media (max-width: 860px) {
   html[data-brand] .phero__in { padding-block: 40px 28px; }
-  html[data-brand] .showcase { padding-bottom: 32px; }
-  html[data-brand] .pbody { padding-block: 32px 40px; }
+  html[data-brand] .pstage { padding-block: 32px 40px; }
   html[data-brand] .actionbar {
     background: color-mix(in srgb, var(--bg) 82%, transparent);
     -webkit-backdrop-filter: blur(16px);

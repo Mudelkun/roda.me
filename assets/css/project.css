@@ -13,17 +13,18 @@
 
 /* ---------- hero ---------- */
 
-.phero { border-bottom: 1px solid var(--line-soft); }
-
+/* The background stack and entrance are shared with the home hero (base.css). */
 .phero__in {
+  position: relative;
+  z-index: 1;
   display: grid;
   grid-template-columns: minmax(0, 1fr) 300px;
-  gap: 32px;
+  gap: 48px;
   align-items: start;
-  padding-block: 32px 26px;
+  padding-block: 48px 44px;
 }
 
-.phero__text { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.phero__text { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
 .phero__logo { width: 64px; height: 64px; margin-bottom: 4px; }
 
 .phero__title {
@@ -33,8 +34,18 @@
   margin: 0;
 }
 
-.phero__pitch { max-width: 520px; }
-
+/* The descriptor after the colon, on its own line in the accent gradient. The padding
+   keeps the clipped gradient from shaving glyph tops at this tight line-height. */
+.phero__title .btitle__tail {
+  display: block;
+  font-style: normal;
+  background-image: linear-gradient(100deg, var(--brand-grad-a) 0%, var(--brand-grad-b) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  padding-block: .08em;
+  margin-block: -.08em;
+}
 /* Facts card - the sticky rail from 4a. */
 .facts {
   border: 1px solid var(--line);
@@ -60,40 +71,64 @@
 /* Mobile fact strip (4b). */
 .phero__strip { display: none; gap: 7px; flex-wrap: wrap; }
 
-/* ---------- walkthrough video ---------- */
+/* ---------- stage: media beside the write-up ---------- */
 
-.walkthrough { padding-block: 26px; border-bottom: 1px solid var(--line-soft); }
-.walkthrough__frame {
-  position: relative;
-  max-width: 1080px;
-  margin-inline: auto;
-  aspect-ratio: 16 / 9;
-  border: 1px solid var(--line);
-  background: var(--fill);
-  overflow: hidden;
+.pstage {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  align-items: start;
+  padding-block: 40px 48px;
 }
-.walkthrough__frame video { width: 100%; height: 100%; object-fit: cover; }
-.walkthrough__cap { margin-top: 8px; max-width: 1080px; margin-inline: auto; }
+.pstage--solo { grid-template-columns: minmax(0, 760px); }
 
-/* ---------- showcase (screenshots in place of a video) ---------- */
+.pstage__media { display: flex; flex-direction: column; gap: 20px; min-width: 0; padding-right: 44px; }
 
-.showcase { padding-block: 26px; border-bottom: 1px solid var(--line-soft); }
-.showcase__stage { max-width: 1080px; margin-inline: auto; }
-.showcase__frame {
+/* The rule between the two columns: the demo on one side, the reading on the other. */
+.pstage__text {
+  display: flex; flex-direction: column; gap: 34px; min-width: 0;
+  padding-left: 44px;
+  border-left: 1px solid var(--line-soft);
+}
+.pstage--solo .pstage__text { padding-left: 0; border-left: 0; }
+
+/* Sticky only where the whole media column fits under the header. */
+@media (min-width: 981px) and (min-height: 720px) {
+  .pstage__media { position: sticky; top: 78px; }
+}
+
+/* The media card - framed and lifted so the demo reads as the lead. */
+.pmedia {
+  position: relative;
+  display: flex; flex-direction: column; gap: 12px;
+  padding: 14px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  box-shadow: 0 0 0 5px var(--fill), 0 34px 70px -38px var(--brand-shadow);
+}
+.pmedia::before {
+  content: "";
+  position: absolute; inset: -1px -1px auto; height: 3px;
+  background: linear-gradient(90deg, var(--accent), var(--brand-accent-2));
+}
+.pmedia__head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+
+.pmedia__frame {
+  position: relative;
   display: block; width: 100%; padding: 0;
   aspect-ratio: 16 / 10;
   border: 1px solid var(--line);
   background: var(--fill);
-  cursor: zoom-in;
+  overflow: hidden;
 }
-.showcase__bar {
-  max-width: 1080px; margin: 10px auto 0;
-  display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
-}
-.showcase__cap { min-width: 0; flex: 1 1 260px; }
+button.pmedia__frame { cursor: zoom-in; }
+.pmedia__frame--video { aspect-ratio: 16 / 9; }
+.pmedia__frame video { width: 100%; height: 100%; object-fit: cover; }
+
+.showcase__bar { display: flex; align-items: center; justify-content: space-between; gap: 12px 16px; flex-wrap: wrap; }
+.showcase__cap { min-width: 0; flex: 1 1 220px; }
 .showcase__thumbs { display: flex; gap: 8px; }
 .showcase__thumb {
-  width: 88px; aspect-ratio: 16 / 10; padding: 0;
+  width: 72px; aspect-ratio: 16 / 10; padding: 0;
   border: 1px solid var(--line);
   background: var(--fill);
   overflow: hidden;
@@ -105,17 +140,7 @@
 .showcase__thumb:hover { opacity: .9; }
 .showcase__thumb.is-active { opacity: 1; border-color: var(--accent); }
 
-/* ---------- body: main + rail ---------- */
-
-.pbody {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 300px;
-  gap: 40px;
-  align-items: start;
-  padding-block: 34px 44px;
-}
-
-.pbody__main { display: flex; flex-direction: column; gap: 34px; min-width: 0; }
+/* ---------- write-up ---------- */
 
 .psec { display: flex; flex-direction: column; gap: 12px; scroll-margin-top: 78px; }
 .psec p { margin: 0; color: var(--fg-dim); }
@@ -128,6 +153,8 @@
 
 /* key features */
 .features { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; list-style: none; margin: 0; padding: 0; }
+/* Beside the demo the text column is too narrow for two feature columns. */
+.pstage:not(.pstage--solo) .features { grid-template-columns: minmax(0, 1fr); }
 .feature { display: flex; gap: 12px; align-items: flex-start; }
 .feature__ic {
   flex: none;
@@ -162,29 +189,23 @@
 }
 .arch img { width: 100%; }
 
-/* ---------- right rail ---------- */
-
-.prail { display: flex; flex-direction: column; gap: 22px; }
-
-@media (min-width: 981px) {
-  .prail { position: sticky; top: 78px; }
-}
-
-.toc ol { list-style: none; margin: 8px 0 0; padding: 0; display: flex; flex-direction: column; gap: 2px; }
+/* Section links under the media card, highlighting the section being read. */
+.toc ol { list-style: none; margin: 8px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
 .toc a {
   display: block;
   text-decoration: none;
-  font-size: 13px;
-  color: var(--fg-faint);
-  padding: 6px 0 6px 12px;
-  border-left: 2px solid var(--line-soft);
-  transition: color .15s ease, border-color .15s ease;
+  font-size: 12px;
+  color: var(--fg-dim);
+  padding: 6px 12px;
+  border: 1px solid var(--line-soft);
+  border-radius: 20px;
+  transition: color .15s ease, border-color .15s ease, background-color .15s ease;
 }
-.toc a:hover { color: var(--fg); }
-.toc a[aria-current="true"] { color: var(--accent-text); border-left-color: var(--accent); }
+.toc a:hover { color: var(--fg); border-color: var(--line); }
+.toc a[aria-current="true"] { color: var(--accent-text); border-color: var(--accent); background: var(--accent-wash); }
 
 .screens { display: flex; flex-direction: column; gap: 8px; }
-.screens__grid { display: flex; flex-direction: column; gap: 8px; margin: 8px 0 0; padding: 0; list-style: none; }
+.screens__grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin: 8px 0 0; padding: 0; list-style: none; }
 .screens__btn {
   display: block; width: 100%; padding: 0; cursor: zoom-in;
   aspect-ratio: 16 / 10;
@@ -240,10 +261,10 @@
 /* ---------- mobile layout (4b) ---------- */
 
 @media (max-width: 980px) {
-  .pbody { grid-template-columns: 1fr; gap: 28px; }
-  .prail { position: static; }
-  .screens__grid { flex-direction: row; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 6px; }
-  .screens__grid li { flex: 0 0 72%; scroll-snap-align: start; }
+  .pstage { grid-template-columns: minmax(0, 1fr); padding-block: 28px 40px; }
+  .pstage__media { padding-right: 0; }
+  .pstage__text { padding-left: 0; border-left: 0; border-top: 1px solid var(--line-soft); margin-top: 28px; padding-top: 28px; }
+  .pstage--solo .pstage__text { border-top: 0; margin-top: 0; padding-top: 0; }
 }
 
 @media (max-width: 860px) {
@@ -252,8 +273,8 @@
   .phero__strip { display: flex; }
 
   .features { grid-template-columns: 1fr; gap: 14px; }
-  .showcase { padding-block: 18px; }
-  .showcase__thumb { width: 64px; }
+  .pmedia { padding: 10px; }
+  .showcase__thumb { width: 60px; }
   .layer { grid-template-columns: 1fr; gap: 8px; }
   .layer__why { grid-column: 1; }
 

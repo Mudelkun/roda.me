@@ -26,10 +26,10 @@
 
   /* ---------- entrance ---------- */
 
-  function initReveal() {
-    if (!hero) return;
+  function initReveal(section) {
+    if (!section) return;
     requestAnimationFrame(function () {
-      requestAnimationFrame(function () { hero.classList.add("is-ready"); });
+      requestAnimationFrame(function () { section.classList.add("is-ready"); });
     });
   }
 
@@ -39,9 +39,9 @@
      so it trails rather than snaps. Fine pointers only: on touch there is no
      hover to respond to, and the extra paint is not worth it. */
 
-  function initSpot() {
-    if (!hero) return;
-    var spot = $(".hero__spot", hero);
+  function initSpot(section) {
+    if (!section) return;
+    var spot = $(".hero__spot", section);
     if (!spot) return;
     if (reduced() || !window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
 
@@ -54,17 +54,17 @@
       raf = Math.abs(tx - x) > 0.4 || Math.abs(ty - y) > 0.4 ? requestAnimationFrame(frame) : 0;
     }
 
-    hero.addEventListener("pointermove", function (e) {
+    section.addEventListener("pointermove", function (e) {
       if (e.pointerType !== "mouse") return;
-      var r = hero.getBoundingClientRect();
+      var r = section.getBoundingClientRect();
       tx = e.clientX - r.left;
       ty = e.clientY - r.top;
-      if (!seeded) { x = tx; y = ty; seeded = true; hero.classList.add("is-tracking"); }
+      if (!seeded) { x = tx; y = ty; seeded = true; section.classList.add("is-tracking"); }
       if (!raf) raf = requestAnimationFrame(frame);
     }, { passive: true });
 
-    hero.addEventListener("pointerleave", function () {
-      hero.classList.remove("is-tracking");
+    section.addEventListener("pointerleave", function () {
+      section.classList.remove("is-tracking");
       seeded = false;
     });
   }
@@ -253,10 +253,21 @@
     initHandleTip();
     initCopy();
     initBio();
-    initSpot();
+    initSpot(hero);
     initScrollCue();
-    initReveal();
+    initReveal(hero);
   }
+
+  /* The project page renders its hero after load, then binds the same
+     entrance and pointer light to it. */
+  window.HeroFx = {
+    bind: function (section) {
+      if (!section) return;
+      if (!reduced()) section.classList.add("can-reveal");
+      initSpot(section);
+      initReveal(section);
+    }
+  };
 
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", init);

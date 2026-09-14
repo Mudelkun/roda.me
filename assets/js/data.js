@@ -92,7 +92,7 @@ window.SITE = {
       poster: "assets/media/louvo-poster.jpg",
       /* The app's mark, copied from Hairify/web/public/luvo-mark.png. Shown on the detail page. */
       logo: "assets/media/louvo-logo.png",
-      facts: { Role: "Solo build", Timeline: "2026", Status: "Live", Domain: "Louvo.app" },
+      facts: { Role: "Solo build", Timeline: "2026", Domain: "Louvo.app" },
       /* Louvo's type and shape (Instrument Serif + Inter, 20px plates) with the
          portfolio's own colours. Add a `colors` block to draw a card in its product's
          palette instead - see assets/js/brand.js for the keys. */
