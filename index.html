@@ -113,6 +113,10 @@
             <a class="btn btn--icon" data-bind-attr="href:profile.github" href="https://github.com/your-handle" target="_blank" rel="me noopener" aria-label="GitHub profile" data-tip="GitHub">
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.9 1.53 2.36 1.09 2.94.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02a9.5 9.5 0 0 1 5 0c1.91-1.29 2.75-1.02 2.75-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0 0 12 2Z"/></svg>
             </a>
+
+            <a class="btn btn--icon" data-bind-attr="href:profile.instagram" href="https://www.instagram.com/rod_arly/" target="_blank" rel="me noopener" aria-label="Instagram profile" data-tip="@rod_arly">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M7.5 2h9A5.5 5.5 0 0 1 22 7.5v9a5.5 5.5 0 0 1-5.5 5.5h-9A5.5 5.5 0 0 1 2 16.5v-9A5.5 5.5 0 0 1 7.5 2Zm0 2A3.5 3.5 0 0 0 4 7.5v9A3.5 3.5 0 0 0 7.5 20h9a3.5 3.5 0 0 0 3.5-3.5v-9A3.5 3.5 0 0 0 16.5 4ZM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10Zm0 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6Zm5.5-3.7a1.2 1.2 0 1 1 0 2.4 1.2 1.2 0 0 1 0-2.4Z"/></svg>
+            </a>
           </div>
 
           <p class="sr" id="hero-copy-live" role="status"></p>
@@ -195,7 +199,7 @@
 
       <noscript>
         <p class="note">The project list needs JavaScript. The write-ups live at
-          <a href="project.html?p=project-one">Project One</a> and
+          <a href="project.html?p=project-one">Formel</a> and
           <a href="project.html?p=project-two">Project Two</a>.</p>
       </noscript>
     </div>
@@ -211,14 +215,28 @@
         </p>
 
         <div class="contact__actions">
-          <a class="btn btn--icon" id="contact-email" href="mailto:you@example.com" aria-label="Email me">
+          <a class="btn btn--primary hero__cta" data-bind-attr="href:profile.resume" href="assets/media/resume.pdf" target="_blank" rel="noopener">
+            <span>View résumé</span>
+            <svg class="hero__cta-i" viewBox="0 0 24 24" aria-hidden="true"><path d="M11 3h2v11.2l4.1-4.1 1.4 1.4L12 18l-6.5-6.5 1.4-1.4L11 14.2Z"/><path d="M4 19h16v2H4z"/></svg>
+          </a>
+
+          <a class="btn btn--icon" id="contact-email" href="mailto:you@example.com" aria-label="Email me" data-tip="Email me">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2Zm0 4.2-8 5-8-5V6l8 5 8-5Z"/></svg>
           </a>
-          <a class="btn btn--icon" data-bind-attr="href:profile.github" href="https://github.com/your-handle" target="_blank" rel="me noopener" aria-label="GitHub profile">
+          <button class="btn btn--icon hero__copy" id="contact-copy" type="button" aria-label="Copy email address" data-tip="Copy address">
+            <svg class="hero__copy-i" viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12Zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2Zm0 16H8V7h11Z"/></svg>
+            <svg class="hero__copy-ok" viewBox="0 0 24 24" aria-hidden="true"><path d="M9.5 17.6 4 12.1l1.6-1.6 3.9 3.9L18.4 5.5 20 7.1Z"/></svg>
+          </button>
+
+          <a class="btn btn--icon" data-bind-attr="href:profile.github" href="https://github.com/your-handle" target="_blank" rel="me noopener" aria-label="GitHub profile" data-tip="GitHub">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.9 1.53 2.36 1.09 2.94.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02a9.5 9.5 0 0 1 5 0c1.91-1.29 2.75-1.02 2.75-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0 0 12 2Z"/></svg>
           </a>
-          <a class="btn btn--ghost" id="contact-hello" href="mailto:you@example.com">Say hello</a>
+          <a class="btn btn--icon" data-bind-attr="href:profile.instagram" href="https://www.instagram.com/rod_arly/" target="_blank" rel="me noopener" aria-label="Instagram profile" data-tip="@rod_arly">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M7.5 2h9A5.5 5.5 0 0 1 22 7.5v9a5.5 5.5 0 0 1-5.5 5.5h-9A5.5 5.5 0 0 1 2 16.5v-9A5.5 5.5 0 0 1 7.5 2Zm0 2A3.5 3.5 0 0 0 4 7.5v9A3.5 3.5 0 0 0 7.5 20h9a3.5 3.5 0 0 0 3.5-3.5v-9A3.5 3.5 0 0 0 16.5 4ZM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10Zm0 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6Zm5.5-3.7a1.2 1.2 0 1 1 0 2.4 1.2 1.2 0 0 1 0-2.4Z"/></svg>
+          </a>
         </div>
+
+        <p class="sr" id="contact-copy-live" role="status"></p>
       </div>
 
       <div class="contact__chat" id="chat-mount"></div>

@@ -208,6 +208,14 @@
         });
         if (cap) cap.textContent = imgs[index].getAttribute("data-caption") || "";
         box.setAttribute("data-index", String(index));
+        // Keep the active thumbnail in view inside a scrolling strip (never scrolls the page).
+        var thumb = dots[index];
+        var strip = thumb && thumb.parentElement;
+        if (strip && strip.scrollWidth > strip.clientWidth) {
+          var left = thumb.offsetLeft - strip.offsetLeft;
+          var target = left - (strip.clientWidth - thumb.offsetWidth) / 2;
+          strip.scrollTo({ left: Math.max(0, target), behavior: reducedMotion.matches ? "auto" : "smooth" });
+        }
       }
 
       function schedule() {
@@ -221,6 +229,14 @@
         d.addEventListener("click", function (e) {
           e.stopPropagation();
           show(Number(d.getAttribute("data-slide-to")));
+          schedule();
+        });
+      });
+
+      Array.prototype.slice.call(scope.querySelectorAll("[data-slide-step]")).forEach(function (btn) {
+        btn.addEventListener("click", function (e) {
+          e.stopPropagation();
+          show(index + Number(btn.getAttribute("data-slide-step")));
           schedule();
         });
       });

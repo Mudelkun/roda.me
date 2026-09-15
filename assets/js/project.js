@@ -32,6 +32,50 @@
   function paras(text) {
     return String(text).split(/\n\s*\n/).map(function (p) { return "<p>" + esc(p.trim()) + "</p>"; }).join("");
   }
+  /* Features grouped by area: tabs show one area at a time, so a long list never lands
+     all at once. Every panel is in the markup; initFeatureGroups switches between them. */
+  function featureGroupsHtml(groups) {
+    var n = groups.length;
+    function icon(key) { return (window.Icons && Icons.feature(key)) || ""; }
+    function label(g) { return g.short || g.name; }
+
+    var tabs = groups.map(function (g, i) {
+      return '' +
+        '<button class="fgroups__tab" type="button" role="tab" id="fg-tab-' + i + '" aria-controls="fg-panel-' + i + '" ' +
+          'aria-selected="' + (i === 0) + '" tabindex="' + (i === 0 ? 0 : -1) + '">' +
+          '<span class="fgroups__tab-ic" aria-hidden="true">' + icon(g.icon) + "</span>" +
+          '<span class="fgroups__tab-name">' + esc(label(g)) + "</span>" +
+        "</button>";
+    }).join("");
+
+    var panels = groups.map(function (g, i) {
+      var prev = i > 0
+        ? '<button class="fgroups__nav" type="button" data-fg-go="' + (i - 1) + '">← ' + esc(label(groups[i - 1])) + "</button>"
+        : "<span></span>";
+      var next = i < n - 1
+        ? '<button class="fgroups__nav" type="button" data-fg-go="' + (i + 1) + '">Next: ' + esc(label(groups[i + 1])) + " →</button>"
+        : "";
+      return '' +
+        '<div class="fgroups__panel" role="tabpanel" id="fg-panel-' + i + '" aria-labelledby="fg-tab-' + i + '"' + (i ? " hidden" : "") + ">" +
+          '<div class="fgroups__head">' +
+            '<h3 class="fgroups__name">' + esc(g.name) + "</h3>" +
+          "</div>" +
+          (g.intro ? '<p class="fgroups__intro">' + esc(g.intro) + "</p>" : "") +
+          '<ul class="fgroups__list">' + g.items.map(function (item, j) {
+            /* An item is { icon, text }, or plain text with a check mark. */
+            var text = typeof item === "string" ? item : item.text;
+            var mark = (typeof item === "string" ? "" : icon(item.icon)) || icon("check");
+            return '<li style="--i:' + j + '"><span class="fgroups__ic" aria-hidden="true">' + mark + "</span><span>" + esc(text) + "</span></li>";
+          }).join("") + "</ul>" +
+          '<div class="fgroups__foot">' + prev + next + "</div>" +
+        "</div>";
+    }).join("");
+
+    return '<div class="fgroups" data-fgroups>' +
+      '<div class="fgroups__tabs" role="tablist" aria-label="Feature areas">' + tabs + "</div>" +
+      panels + "</div>";
+  }
+
   /* ---------- sections ---------- */
 
   function sections(project) {
@@ -41,7 +85,9 @@
     if (project.whatItDoes) list.push({ id: "what", title: "What it does", html: paras(project.whatItDoes) });
     if (project.whyIBuiltIt) list.push({ id: "why", title: "Why I built it", html: paras(project.whyIBuiltIt) });
 
-    if (project.features && project.features.length) {
+    if (project.featureGroups && project.featureGroups.length) {
+      list.push({ id: "features", title: "Key features", html: featureGroupsHtml(project.featureGroups) });
+    } else if (project.features && project.features.length) {
       list.push({
         id: "features",
         title: "Key features",
@@ -67,7 +113,12 @@
             '<div class="layer">' +
               '<h3 class="h-sub">' + esc(layer.layer) + "</h3>" +
               '<ul class="stack-tags">' + layer.items.map(function (t) {
-                return '<li><span class="pill">' + (window.Icons ? Icons.logo(t) : "") + esc(t) + "</span></li>";
+                var logo = window.Icons ? Icons.logo(t) : "";
+                var site = window.Icons ? Icons.site(t) : "";
+                if (!site) return '<li><span class="pill">' + logo + esc(t) + "</span></li>";
+                return '<li><a class="pill pill--link" href="' + esc(site) + '" target="_blank" rel="noopener" ' +
+                  'aria-label="' + esc(t) + ' website (opens in a new tab)">' +
+                  logo + esc(t) + '<span class="pill__ext" aria-hidden="true">↗</span></a></li>';
               }).join("") + "</ul>" +
             "</div>";
         }).join("") + "</div>"
@@ -109,11 +160,25 @@
     var stripItems = [facts.Status, facts.Timeline, facts.Role].filter(Boolean);
 
     var actions =
-      '<a class="btn btn--primary" href="' + esc(project.live) + '" target="_blank" rel="noopener">Try it live →</a>' +
+      (project.live ? '<a class="btn btn--primary" href="' + esc(project.live) + '" target="_blank" rel="noopener">Try it live →</a>' : "") +
       (project.source ? '<a class="btn" href="' + esc(project.source) + '" target="_blank" rel="noopener">Source on GitHub</a>' : "");
 
-    /* "Name: descriptor" - the descriptor after the colon is set in the accent gradient. */
+    /* "Name: descriptor" - the descriptor after the colon is set in the accent gradient.
+       A long descriptor steps the title down a size so it holds one line. */
     var title = window.Brand ? Brand.title(project.title, esc) : esc(project.title);
+    var tail = project.title.split(":")[1] || "";
+    var titleClass = "phero__title" + (tail.trim().length > 27 ? " phero__title--long" : "");
+
+    /* The logo links to the live app when there is one; either way it gets the hover lift. */
+    var logoClass = "phero__logo" + (project.logoRound ? " phero__logo--round" : "");
+    var logoImgs = project.logo
+      ? '<img class="' + logoClass + (project.logoDark ? " phero__logo--light" : "") + '" src="' + esc(project.logo) + '" alt="" width="64" height="64">' +
+        (project.logoDark ? '<img class="' + logoClass + ' phero__logo--dark" src="' + esc(project.logoDark) + '" alt="" width="64" height="64">' : "")
+      : "";
+    var logo = !project.logo ? ""
+      : project.live
+        ? '<a class="phero__logo-link" data-reveal style="--d:.02s" href="' + esc(project.live) + '" target="_blank" rel="noopener" aria-label="Visit ' + esc(project.title.split(":")[0]) + ' (opens in a new tab)">' + logoImgs + "</a>"
+        : '<span class="phero__logo-link" data-reveal style="--d:.02s">' + logoImgs + "</span>";
 
     return '' +
       '<section class="phero" aria-labelledby="p-title">' +
@@ -126,18 +191,14 @@
         "</div>" +
         '<div class="shell phero__in">' +
           '<div class="phero__text">' +
-            (project.logo
-              ? '<img class="phero__logo" data-reveal style="--d:.02s" src="' + esc(project.logo) + '" alt="' + esc(project.title.split(":")[0]) + ' logo" width="64" height="64">'
-              : "") +
-            '<p class="eyebrow" data-reveal style="--d:.06s">Project ' + esc(project.index) + "</p>" +
-            '<h1 class="phero__title" id="p-title" data-reveal style="--d:.1s">' + title + "</h1>" +
+            logo +
+            '<h1 class="' + titleClass + '" id="p-title" data-reveal style="--d:.1s">' + title + "</h1>" +
             '<ul class="phero__strip stack-tags" data-reveal style="--d:.2s">' + pills(stripItems) + "</ul>" +
           "</div>" +
           '<aside class="facts" aria-label="Project facts" data-reveal style="--d:.22s">' +
             '<h2 class="h-sub">The facts</h2>' +
             '<dl class="facts__rows">' + rows + "</dl>" +
-            '<ul class="stack-tags">' + pills((project.tags || []).slice(0, 4)) + "</ul>" +
-            '<div class="facts__actions">' + actions + "</div>" +
+            (actions ? '<div class="facts__actions">' + actions + "</div>" : "") +
           "</aside>" +
         "</div>" +
       "</section>";
@@ -150,6 +211,15 @@
 
   function hasShowcase(project) {
     return !project.video && showcaseShots(project).length > 0;
+  }
+
+  /* Previous / next screenshot. Brand.slides wires [data-slide-step]. */
+  function stepButton(step) {
+    var label = step < 0 ? "Previous screenshot" : "Next screenshot";
+    var path = step < 0 ? "m15 18-6-6 6-6" : "m9 18 6-6-6-6";
+    return '<button class="showcase__step" type="button" data-slide-step="' + step + '" aria-label="' + label + '">' +
+      '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+      '<path d="' + path + '"/></svg></button>';
   }
 
   /* The media card: the walkthrough video, or the crossfading demo and screenshots. */
@@ -187,9 +257,8 @@
       }).join("") + "</div>" : "";
 
     return '' +
-      '<section class="pmedia" aria-label="Demo" data-slides-scope>' +
+      '<section class="pmedia' + (project.showcaseDark ? " pmedia--dark" : "") + '" aria-label="Demo" data-slides-scope>' +
         '<div class="pmedia__head">' +
-          '<h2 class="h-sub">See it in action</h2>' +
           '<span class="note">Click to enlarge</span>' +
         "</div>" +
         '<button class="pmedia__frame" type="button" id="showcase-frame" data-frame data-slides="4200" aria-label="Enlarge screenshot">' +
@@ -197,7 +266,12 @@
         "</button>" +
         '<div class="showcase__bar">' +
           '<p class="note showcase__cap" data-slide-cap>' + esc(shots[0].caption || "") + "</p>" +
-          thumbs +
+          '<div class="showcase__row">' +
+            (shots.length > 1 ? stepButton(-1) : "") +
+            thumbs +
+            (shots.length > 1 ? stepButton(1) : "") +
+            (project.live ? '<a class="btn btn--primary pmedia__try" href="' + esc(project.live) + '" target="_blank" rel="noopener">Try it →</a>' : "") +
+          "</div>" +
         "</div>" +
       "</section>";
   }
@@ -261,7 +335,7 @@
   function actionBar(project) {
     return '' +
       '<div class="actionbar">' +
-        '<a class="btn btn--primary" href="' + esc(project.live) + '" target="_blank" rel="noopener">Try it live →</a>' +
+        (project.live ? '<a class="btn btn--primary" href="' + esc(project.live) + '" target="_blank" rel="noopener">Try it live →</a>' : "") +
         (project.source ? '<a class="btn" href="' + esc(project.source) + '" target="_blank" rel="noopener">Source</a>' : "") +
         '<button class="btn btn--ask" type="button" id="ask-btn" aria-label="Ask about this build">Ask</button>' +
       "</div>";
@@ -288,6 +362,42 @@
     });
   }
 
+  /* Tabs for grouped features: click, arrow keys, Home/End, or the prev/next links under
+     a panel. Switching replays the panel's entrance so the change reads at a glance. */
+  function initFeatureGroups(root) {
+    Array.prototype.forEach.call(root.querySelectorAll("[data-fgroups]"), function (box) {
+      var tabs = Array.prototype.slice.call(box.querySelectorAll('[role="tab"]'));
+      var panels = Array.prototype.slice.call(box.querySelectorAll('[role="tabpanel"]'));
+
+      function select(i, focus) {
+        i = (i + tabs.length) % tabs.length;
+        tabs.forEach(function (tab, j) {
+          tab.setAttribute("aria-selected", j === i ? "true" : "false");
+          tab.tabIndex = j === i ? 0 : -1;
+          panels[j].hidden = j !== i;
+        });
+        panels[i].classList.remove("is-in");
+        void panels[i].offsetWidth;
+        panels[i].classList.add("is-in");
+        if (focus) tabs[i].focus();
+      }
+
+      tabs.forEach(function (tab, i) {
+        tab.addEventListener("click", function () { select(i); });
+        tab.addEventListener("keydown", function (e) {
+          var to = { ArrowRight: i + 1, ArrowDown: i + 1, ArrowLeft: i - 1, ArrowUp: i - 1, Home: 0, End: tabs.length - 1 }[e.key];
+          if (to === undefined) return;
+          e.preventDefault();
+          select(to, true);
+        });
+      });
+
+      Array.prototype.forEach.call(box.querySelectorAll("[data-fg-go]"), function (btn) {
+        btn.addEventListener("click", function () { select(Number(btn.getAttribute("data-fg-go")), true); });
+      });
+    });
+  }
+
   function initLightbox(project) {
     var dialog = document.getElementById("lightbox");
     var img = document.getElementById("lightbox-img");
@@ -295,32 +405,74 @@
     var close = document.getElementById("lightbox-close");
     if (!dialog || !dialog.showModal) return;
 
+    /* Previous / next + a counter, added here so the dialog markup stays as it is. */
+    function stepBtn(step) {
+      var b = document.createElement("button");
+      b.type = "button";
+      b.className = "lightbox__step lightbox__step--" + (step < 0 ? "prev" : "next");
+      b.setAttribute("aria-label", step < 0 ? "Previous screenshot" : "Next screenshot");
+      b.innerHTML = '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" ' +
+        'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="' + (step < 0 ? "m15 18-6-6 6-6" : "m9 18 6-6-6-6") + '"/></svg>';
+      b.addEventListener("click", function (e) { e.stopPropagation(); go(index + step); });
+      dialog.appendChild(b);
+      return b;
+    }
+    var prev = stepBtn(-1);
+    var next = stepBtn(1);
+    var count = document.createElement("span");
+    count.className = "lightbox__count";
+    cap.parentNode.insertBefore(count, cap);
+
+    var list = [];
+    var index = 0;
+    var fromShowcase = false;
+
+    function go(i) {
+      if (!list.length) return;
+      index = (i + list.length) % list.length;
+      var shot = list[index];
+      img.src = shot.src;
+      img.alt = shot.caption || "Screenshot";
+      cap.textContent = shot.caption || "";
+      count.textContent = list.length > 1 ? (index + 1) + " / " + list.length : "";
+      // Keep the slideshow behind in step, so closing lands on the same screenshot.
+      if (fromShowcase) {
+        var thumb = document.querySelector('[data-slide-to="' + index + '"]');
+        if (thumb) thumb.click();
+      }
+    }
+
+    function open(shots, i, showcase) {
+      list = shots || [];
+      fromShowcase = !!showcase;
+      prev.hidden = next.hidden = list.length < 2;
+      go(i);
+      if (!dialog.open) dialog.showModal();
+    }
+
     UI.$$(".screens__btn").forEach(function (btn) {
       btn.addEventListener("click", function () {
-        var shot = project.screens[Number(btn.dataset.shot)];
-        if (!shot) return;
-        img.src = shot.src;
-        img.alt = shot.caption || "Screenshot";
-        cap.textContent = shot.caption || "";
-        dialog.showModal();
+        open(project.screens, Number(btn.dataset.shot), false);
       });
     });
 
     var frame = document.getElementById("showcase-frame");
     if (frame) {
       frame.addEventListener("click", function () {
-        var shot = showcaseShots(project)[Number(frame.getAttribute("data-index")) || 0];
-        if (!shot) return;
-        img.src = shot.src;
-        img.alt = shot.caption || "Screenshot";
-        cap.textContent = shot.caption || "";
-        dialog.showModal();
+        open(showcaseShots(project), Number(frame.getAttribute("data-index")) || 0, true);
       });
     }
 
+    dialog.addEventListener("keydown", function (e) {
+      if (e.key === "ArrowLeft") { e.preventDefault(); go(index - 1); }
+      if (e.key === "ArrowRight") { e.preventDefault(); go(index + 1); }
+    });
+
     close.addEventListener("click", function () { dialog.close(); });
+    /* .lightbox__in fills the whole dialog, so a click on the dialog itself never happens -
+       close on any click that is not on the image or a control. Escape closes it natively. */
     dialog.addEventListener("click", function (e) {
-      if (e.target === dialog) dialog.close();
+      if (!e.target.closest("img, #lightbox-close, .lightbox__step")) dialog.close();
     });
   }
 
@@ -371,6 +523,7 @@
     UI.initBindings(root);
     UI.initMediaFallback(root);
     initToc(secs);
+    initFeatureGroups(root);
     initLightbox(project);
     if (window.Brand) Brand.slides(root);
 

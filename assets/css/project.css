@@ -25,7 +25,41 @@
 }
 
 .phero__text { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
-.phero__logo { width: 64px; height: 64px; margin-bottom: 4px; }
+.phero__logo { display: block; width: 64px; height: 64px; margin-bottom: 4px; }
+.phero__logo-link { display: block; width: fit-content; align-self: flex-start; border-radius: 16px; }
+
+/* A project with a logoDark shows it on the (default) dark theme, and its logo on light. */
+.phero__logo--round { border-radius: 50%; }
+.phero__logo--light { display: none; }
+[data-theme="light"] .phero__logo--light { display: block; }
+[data-theme="light"] .phero__logo--dark { display: none; }
+
+/* Logo hover lift. scale/rotate are separate properties, so they never fight the
+   entrance reveal, which animates transform. */
+@media (prefers-reduced-motion: no-preference) {
+  .phero__logo,
+  .pill__logo {
+    transition:
+      scale .45s cubic-bezier(.34, 1.4, .64, 1),
+      rotate .45s cubic-bezier(.34, 1.4, .64, 1),
+      filter .45s ease;
+  }
+  /* Same specificity as the reveal rule in base.css, loaded later, so both transitions survive. */
+  .phero.is-ready .phero__logo {
+    transition:
+      opacity .72s cubic-bezier(.22, .61, .36, 1) var(--d, 0s),
+      transform .72s cubic-bezier(.22, .61, .36, 1) var(--d, 0s),
+      scale .45s cubic-bezier(.34, 1.4, .64, 1),
+      rotate .45s cubic-bezier(.34, 1.4, .64, 1),
+      filter .45s ease;
+  }
+  .phero__logo-link:is(:hover, :focus-visible) .phero__logo {
+    scale: 1.08;
+    rotate: -4deg;
+    filter: drop-shadow(0 12px 20px rgb(0 0 0 / .2));
+  }
+  .pill:hover .pill__logo { scale: 1.2; rotate: -8deg; }
+}
 
 .phero__title {
   font: 800 clamp(38px, 6vw, 60px)/.88 Archivo, sans-serif;
@@ -33,6 +67,8 @@
   text-transform: uppercase;
   margin: 0;
 }
+/* Long descriptors step down so they keep to one line, the way a short one does. */
+.phero__title--long { font-size: clamp(30px, 4.4vw, 48px); }
 
 /* The descriptor after the colon, on its own line in the accent gradient. The padding
    keeps the clipped gradient from shaving glyph tops at this tight line-height. */
@@ -62,6 +98,8 @@
   border-bottom: 1px solid var(--line-soft);
   padding-bottom: 7px;
 }
+/* No buttons below (a private project): the last row closes the box without a rule. */
+.facts__rows:last-child .facts__row:last-child { border-bottom: 0; padding-bottom: 0; }
 .facts__row dt { color: var(--fg-faint); }
 .facts__row dd { margin: 0; font-weight: 600; text-align: right; }
 .facts__row dd a { color: inherit; text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
@@ -110,7 +148,14 @@
   position: absolute; inset: -1px -1px auto; height: 3px;
   background: linear-gradient(90deg, var(--accent), var(--brand-accent-2));
 }
-.pmedia__head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.pmedia__head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+/* Thumbnails on the left, Try it on the right, on their own line under the caption. */
+.showcase__row { display: flex; align-items: center; gap: 12px; flex: 1 1 100%; flex-wrap: wrap; min-width: 0; max-width: 100%; }
+.showcase__row > .showcase__thumbs { flex: 1 1 0; }
+/* Specific enough to beat [data-brand] .btn, which loads later in brand.css. */
+.pmedia .showcase__row .pmedia__try { padding: 10px 20px; margin-left: auto; }
+/* With no button, keep "Click to enlarge" on the right. */
+.pmedia__head .note:only-child { margin-left: auto; }
 
 .pmedia__frame {
   position: relative;
@@ -126,7 +171,9 @@ button.pmedia__frame { cursor: zoom-in; }
 
 .showcase__bar { display: flex; align-items: center; justify-content: space-between; gap: 12px 16px; flex-wrap: wrap; }
 .showcase__cap { min-width: 0; flex: 1 1 220px; }
-.showcase__thumbs { display: flex; gap: 8px; }
+/* Many screenshots: the strip scrolls sideways instead of pushing the column wider. */
+.showcase__thumbs { display: flex; gap: 8px; min-width: 0; max-width: 100%; overflow-x: auto; padding-bottom: 4px; scrollbar-width: thin; }
+.showcase__thumb { flex: none; }
 .showcase__thumb {
   width: 72px; aspect-ratio: 16 / 10; padding: 0;
   border: 1px solid var(--line);
@@ -137,6 +184,40 @@ button.pmedia__frame { cursor: zoom-in; }
   transition: opacity .2s ease, border-color .2s ease;
 }
 .showcase__thumb img { width: 100%; height: 100%; object-fit: cover; object-position: top center; }
+
+/* Previous / next, either side of the thumbnail strip. */
+.showcase__step {
+  flex: none;
+  width: 34px; height: 34px; padding: 0;
+  display: grid; place-items: center;
+  color: var(--fg);
+  background: var(--fill);
+  border: 1px solid var(--line);
+  cursor: pointer;
+  transition: border-color .2s ease, color .2s ease, transform .2s ease;
+}
+.showcase__step:hover, .showcase__step:focus-visible { border-color: var(--accent); color: var(--accent-text); }
+.showcase__step:active { transform: scale(.94); }
+.showcase__step:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* Dark box for light screenshots (data.js `showcaseDark`), in either theme. Local
+   tokens, so the caption, thumbnails and buttons inside all follow. */
+.pmedia--dark {
+  --panel: #0e1311;
+  --fg: #f2eee3;
+  --fg-dim: rgb(242 238 227 / .74);
+  --fg-faint: rgb(242 238 227 / .5);
+  --line: rgb(255 255 255 / .16);
+  --line-soft: rgb(255 255 255 / .09);
+  --fill: rgb(255 255 255 / .06);
+  --accent-text: #ffb74d;
+  background: var(--panel);
+  border-color: #0e1311;
+  color: var(--fg);
+}
+.pmedia--dark .note { color: var(--fg-faint); }
+.pmedia--dark .showcase__cap { color: var(--fg-dim); }
+.pmedia--dark .pmedia__frame { background: #1a201d; border-color: var(--line); }
 .showcase__thumb:hover { opacity: .9; }
 .showcase__thumb.is-active { opacity: 1; border-color: var(--accent); }
 
@@ -169,6 +250,66 @@ button.pmedia__frame { cursor: zoom-in; }
 .feature__name { font: 700 14px Archivo, sans-serif; margin: 0; }
 .feature__body p { font-size: 14px; }
 
+/* feature groups: one area at a time, picked from a 2x2 grid of tabs */
+.fgroups { display: flex; flex-direction: column; gap: 12px; }
+.fgroups__tabs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.fgroups__tab {
+  display: flex; align-items: center; gap: 10px; min-width: 0;
+  padding: 9px 12px 9px 9px;
+  font: inherit; text-align: left; color: var(--fg-dim); cursor: pointer;
+  background: var(--fill);
+  border: 1px solid var(--line-soft); border-radius: 8px;
+  transition: color .25s ease, border-color .25s ease, background-color .25s ease;
+}
+.fgroups__tab:hover { color: var(--fg); border-color: var(--line); }
+.fgroups__tab:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.fgroups__tab[aria-selected="true"] { color: var(--fg); border-color: rgb(var(--brand-accent-rgb) / .55); background: var(--accent-wash); }
+.fgroups__tab-ic {
+  flex: none; width: 30px; height: 30px; border-radius: 6px;
+  display: grid; place-items: center;
+  color: var(--accent-text); background: var(--fill-strong); border: 1px solid var(--line);
+  transition: transform .45s cubic-bezier(.34, 1.4, .64, 1), border-color .25s ease;
+}
+.fgroups__tab-ic .icon { width: 16px; height: 16px; }
+.fgroups__tab[aria-selected="true"] .fgroups__tab-ic { transform: rotate(-8deg) scale(1.06); border-color: rgb(var(--brand-accent-rgb) / .45); }
+.fgroups__tab-name { flex: 1; min-width: 0; font: 700 13px/1.2 Archivo, sans-serif; }
+
+.fgroups__panel {
+  display: flex; flex-direction: column; gap: 12px;
+  padding: 16px 18px;
+  background: var(--panel);
+  border: 1px solid var(--line-soft); border-radius: 10px;
+}
+.fgroups__panel[hidden] { display: none; }
+.fgroups__head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.fgroups__name { margin: 0; font: 800 15px/1.2 Archivo, sans-serif; letter-spacing: -.01em; text-transform: uppercase; }
+.psec .fgroups__intro { font-size: 14px; }
+.fgroups__list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.fgroups__list li { display: flex; align-items: center; gap: 12px; font-size: 14px; line-height: 1.5; color: var(--fg-dim); }
+.fgroups__ic {
+  flex: none; width: 28px; height: 28px; border-radius: 7px;
+  display: grid; place-items: center;
+  color: var(--accent-text); background: var(--accent-wash);
+  border: 1px solid rgb(var(--brand-accent-rgb) / .22);
+  transition: transform .45s cubic-bezier(.34, 1.4, .64, 1);
+}
+.fgroups__ic .icon { width: 15px; height: 15px; }
+.fgroups__list li:hover .fgroups__ic { transform: rotate(-8deg) scale(1.08); }
+.fgroups__foot { display: flex; justify-content: space-between; gap: 8px; padding-top: 12px; border-top: 1px solid var(--line-soft); }
+.fgroups__nav {
+  padding: 2px 0; border: 0; background: none; cursor: pointer;
+  font: 700 12px Archivo, sans-serif; color: var(--fg-dim);
+  transition: color .2s ease;
+}
+.fgroups__nav:hover, .fgroups__nav:focus-visible { color: var(--accent-text); }
+
+/* Switching areas: the heading, intro and items rise in, the items one after another. */
+@media (prefers-reduced-motion: no-preference) {
+  .fgroups__panel.is-in :is(.fgroups__head, .fgroups__intro) { animation: fg-in .4s cubic-bezier(.22, .61, .36, 1) both; }
+  .fgroups__panel.is-in li { animation: fg-in .45s cubic-bezier(.22, .61, .36, 1) both; animation-delay: calc(60ms + var(--i) * 35ms); }
+}
+@keyframes fg-in { from { opacity: 0; transform: translateY(8px); } }
+
 /* tech stack, one row per layer */
 .layers { display: flex; flex-direction: column; margin: 0; }
 .layer {
@@ -181,6 +322,39 @@ button.pmedia__frame { cursor: zoom-in; }
 }
 .layer:first-child { padding-top: 0; }
 .pill__logo { width: 14px; height: 14px; flex: none; }
+
+/* Stack pills that link to each tool's site. Three classes deep to beat
+   [data-brand] .pill, which loads later in brand.css and sets its own transition. */
+.layers .layer .pill--link {
+  cursor: pointer;
+  text-decoration: none;
+  transition:
+    translate .4s cubic-bezier(.34, 1.4, .64, 1),
+    border-color .25s ease,
+    background-color .25s ease,
+    color .25s ease,
+    box-shadow .4s ease;
+}
+.layers .layer .pill--link:is(:hover, :focus-visible) {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 12%, var(--fill));
+  color: var(--fg);
+  box-shadow: 0 10px 20px -12px rgb(0 0 0 / .4);
+}
+.layers .layer .pill--link:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.pill__ext {
+  font-size: 10px; line-height: 1;
+  opacity: .4;
+  transition: translate .4s cubic-bezier(.34, 1.4, .64, 1), opacity .25s ease;
+}
+.pill--link:is(:hover, :focus-visible) .pill__ext { opacity: 1; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .layers .layer .pill--link:is(:hover, :focus-visible) { translate: 0 -3px; }
+  .layers .layer .pill--link:active { translate: 0 -1px; transition-duration: .1s; }
+  .pill--link:is(:hover, :focus-visible) .pill__ext { translate: 2px -2px; }
+  .pill--link:focus-visible .pill__logo { scale: 1.2; rotate: -8deg; }
+}
 
 /* architecture */
 .arch {
@@ -251,9 +425,50 @@ button.pmedia__frame { cursor: zoom-in; }
   display: flex; flex-direction: column; align-items: center; justify-content: center;
   gap: 14px; padding: 24px;
 }
-.lightbox img { max-height: 78dvh; width: auto; object-fit: contain; border: 1px solid var(--line); }
+.lightbox img { max-height: 78dvh; max-width: 100%; width: auto; object-fit: contain; border: 1px solid var(--line); cursor: default; }
 .lightbox__bar { display: flex; align-items: center; gap: 10px; }
+.lightbox__in { cursor: zoom-out; }
+
+/* Pinned top-right in solid ink so it reads over any screenshot or backdrop. */
+.lightbox__close {
+  position: absolute; top: 16px; right: 16px; z-index: 1;
+  display: grid; place-items: center;
+  width: 44px; height: 44px; padding: 0;
+  border: 0; border-radius: 999px;
+  background: var(--fg); color: var(--bg);
+  font: 600 18px/1 Archivo, sans-serif;
+  cursor: pointer;
+  box-shadow: 0 10px 24px -8px rgb(0 0 0 / .45);
+  transition: scale .25s ease, rotate .25s ease;
+}
+.lightbox__close:hover { scale: 1.08; rotate: 90deg; }
+.lightbox__close:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 .lightbox__cap { font-size: 13px; color: var(--fg-faint); }
+.lightbox__count { font: 600 12px/1 Archivo, sans-serif; color: var(--fg-dim); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.lightbox__count:empty { display: none; }
+
+/* Previous / next, vertically centred on either side of the screenshot. */
+.lightbox__step {
+  position: absolute; top: 50%; z-index: 1;
+  translate: 0 -50%;
+  display: grid; place-items: center;
+  width: 48px; height: 48px; padding: 0;
+  border: 0; border-radius: 999px;
+  background: var(--fg); color: var(--bg);
+  cursor: pointer;
+  box-shadow: 0 10px 24px -10px rgb(0 0 0 / .6);
+  transition: scale .2s ease, opacity .2s ease;
+}
+.lightbox__step--prev { left: 20px; }
+.lightbox__step--next { right: 20px; }
+.lightbox__step:hover { scale: 1.08; }
+.lightbox__step:active { scale: .95; }
+.lightbox__step:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+@media (max-width: 860px) {
+  .lightbox__step { top: auto; bottom: 18px; translate: none; width: 44px; height: 44px; }
+  .lightbox__step--prev { left: 16px; }
+  .lightbox__step--next { right: 16px; }
+}
 
 /* ---------- mobile action bar (4b) ---------- */
 

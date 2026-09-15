@@ -170,9 +170,15 @@
     });
   }
 
+  /* The hero and the contact section each have a copy button, its live region and a mail link. */
   function initCopy() {
-    var btn = document.getElementById("hero-copy");
-    var live = document.getElementById("hero-copy-live");
+    initCopyButton("hero-copy", "hero-copy-live", "hero-email");
+    initCopyButton("contact-copy", "contact-copy-live", "contact-email");
+  }
+
+  function initCopyButton(btnId, liveId, mailId) {
+    var btn = document.getElementById(btnId);
+    var live = document.getElementById(liveId);
     var email = SITE.profile && SITE.profile.email;
 
     if (!btn) return;
@@ -181,7 +187,7 @@
     btn.setAttribute("data-tip", "Copy " + email);
     btn.setAttribute("aria-label", "Copy email address " + email);
 
-    var mail = document.getElementById("hero-email");
+    var mail = document.getElementById(mailId);
     if (mail) mail.setAttribute("data-tip", email);
 
     var reset = null;
@@ -219,7 +225,7 @@
   function initHandleTip() {
     var gh = SITE.profile && SITE.profile.githubHandle;
     if (!gh) return;
-    $$(".hero__actions [data-tip='GitHub']").forEach(function (node) {
+    $$(":is(.hero__actions, .contact__actions) [data-tip='GitHub']").forEach(function (node) {
       node.setAttribute("data-tip", "@" + gh);
     });
   }

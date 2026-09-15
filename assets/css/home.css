@@ -132,7 +132,8 @@
 .hero__actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-top: 2px; }
 
 /* Lift, press and the primary light sweep are shared by every .btn (base.css). */
-.hero .btn--icon:hover { background: var(--accent-wash); border-color: var(--accent); color: var(--accent-text); }
+/* The contact row repeats the hero's actions, so it shares their hover and tooltips. */
+:is(.hero, .contact) .btn--icon:hover { background: var(--accent-wash); border-color: var(--accent); color: var(--accent-text); }
 
 .hero__cta-i {
   width: 15px; height: 15px;
@@ -178,12 +179,22 @@
   84% { transform: translateY(3px); }
 }
 
-/* ---------- tooltips (hero only) ---------- */
+/* ---------- tooltips (hero and contact) ---------- */
 
-:where(.hero [data-tip]) { position: relative; }
+/* The tooltip colours live on .hero in base.css; the contact section needs its own copy. */
+.contact {
+  --hero-pop: #1d2b24;
+  --hero-shadow: 0 20px 44px -32px rgba(0, 0, 0, .95);
+}
+[data-theme="light"] .contact {
+  --hero-pop: #fffdf7;
+  --hero-shadow: 0 20px 44px -34px rgba(74, 52, 16, .5);
+}
+
+:where(:is(.hero, .contact) [data-tip]) { position: relative; }
 
 @media (hover: hover) and (pointer: fine) {
-  .hero [data-tip]::after {
+  :is(.hero, .contact) [data-tip]::after {
     content: attr(data-tip);
     position: absolute;
     left: 50%; bottom: calc(100% + 9px);
@@ -203,8 +214,8 @@
     pointer-events: none;
     transition: opacity .18s ease, transform .18s ease;
   }
-  .hero [data-tip]:hover::after,
-  .hero [data-tip]:focus-visible::after { opacity: 1; transform: translate(-50%, 0); }
+  :is(.hero, .contact) [data-tip]:hover::after,
+  :is(.hero, .contact) [data-tip]:focus-visible::after { opacity: 1; transform: translate(-50%, 0); }
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -599,6 +610,17 @@
   letter-spacing: -.02em;
   text-transform: uppercase;
   margin: 0;
+}
+/* "Name: descriptor" titles - the descriptor in the accent gradient, branded or not. */
+.pcard__title .btitle__tail {
+  font-style: normal;
+  background-image: linear-gradient(100deg, var(--brand-grad-a) 0%, var(--brand-grad-b) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  padding: 0 .08em .06em 0;
 }
 
 

@@ -1,4 +1,4 @@
-# roda.me
+# rodarly.me
 
 Static portfolio built from wireframes **3** (one-pager, desktop `3a` / mobile `3b`) and
 **4** (project detail, desktop `4a` / mobile `4b`) of the *Portfolio Wireframes* design canvas.

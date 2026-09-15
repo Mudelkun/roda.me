@@ -21,7 +21,8 @@
 
   function cardMedia(project) {
     var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    var screens = project.screens || [];
+    /* The card is a teaser: a handful of screens, the detail page has the rest. */
+    var screens = (project.screens || []).slice(0, 8);
 
     if (project.video) {
       return '' +
@@ -75,9 +76,7 @@
   }
 
   function cardBody(project) {
-    var branded = !!(project.brand && window.Brand);
-
-    var actions = '<a class="btn btn--primary" href="' + esc(project.live) + '" target="_blank" rel="noopener">Try it live →</a>';
+    var actions = project.live ? '<a class="btn btn--primary" href="' + esc(project.live) + '" target="_blank" rel="noopener">Try it live →</a>' : "";
     if (project.source) {
       actions += '<a class="btn" href="' + esc(project.source) + '" target="_blank" rel="noopener">Source</a>';
     }
@@ -86,7 +85,7 @@
     return '' +
       '<div class="pcard__body">' +
         '<h3 class="pcard__title"><a href="' + esc(projectUrl(project)) + '" style="text-decoration:none">' +
-          (branded ? Brand.title(project.title, esc) : esc(project.title)) + "</a></h3>" +
+          (window.Brand ? Brand.title(project.title, esc) : esc(project.title)) + "</a></h3>" +
         '<div class="pcard__summary">' + summaryHtml(project.summary) + "</div>" +
         '<div class="pcard__actions">' + actions + "</div>" +
       "</div>";
@@ -124,7 +123,7 @@
   function wireMailLinks() {
     var email = SITE.profile && SITE.profile.email;
     if (!email) return;
-    ["hero-email", "contact-email", "contact-hello"].forEach(function (id) {
+    ["hero-email", "contact-email"].forEach(function (id) {
       var node = document.getElementById(id);
       if (node) node.href = "mailto:" + email;
     });

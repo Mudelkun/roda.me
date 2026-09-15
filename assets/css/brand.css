@@ -20,8 +20,6 @@
 
 [data-brand] * { font-family: var(--brand-body); }
 
-[data-brand] ::selection { background: rgb(var(--brand-accent-rgb) / .28); color: var(--fg); }
-
 [data-brand] :is(.pcard__title, .phero__title, .psec__title, .pnext__name, .h-sec) {
   font-family: var(--brand-display);
   font-weight: 400;
@@ -354,7 +352,7 @@ html[data-brand] .pnext__card:hover { border-color: rgb(var(--brand-accent-rgb) 
 html[data-brand] .pnext__thumb { border-radius: 8px; }
 
 html[data-brand] .lightbox::backdrop {
-  background: color-mix(in srgb, var(--bg) 88%, transparent);
+  background: color-mix(in srgb, var(--bg) 95%, transparent);
   -webkit-backdrop-filter: blur(8px);
   backdrop-filter: blur(8px);
 }
