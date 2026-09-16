@@ -88,8 +88,8 @@ window.SITE = {
     {
       slug: "formel",
       index: "01",
-      title: "Formel: School management plateforme",
-      pitch: "One-line pitch — what it is, and who it is for.",
+      title: "Formel: School management platform",
+      pitch: "A complete school management platform running my family’s private school in Haiti, used by more than 400 people.",
       summary: "Formel is the biggest project I’ve worked on so far. It is a complete school management platform built for my family’s private school in Haiti. I created it to make it easier to manage and operate the school remotely from Canada.\n\nThe platform was officially implemented in April, with the school’s existing data transferred from Excel into the system. It now serves more than 400 users, and for the 2026–2027 school year, we made a major update by introducing dedicated portals for students, teachers, and parents.",
       tags: ["React", "TypeScript", "Node.js", "Express", "PostgreSQL", "Drizzle ORM"],
       /* Private school system: no public URL or repo, so no live/source buttons. */
@@ -202,12 +202,12 @@ window.SITE = {
     {
       slug: "louvo",
       index: "02",
-      title: "Louvo: Ai Hairstyle try-on website",
+      title: "Louvo: AI hairstyle try-on website",
       pitch: "An AI hairstyle try-on — see the haircut on your own face before you are sitting in the chair.",
       summary: "Louvo is a simple AI-powered app that lets anyone see what they could look like with a different hairstyle before actually getting it. Just upload a photo of yourself, choose a hairstyle, and Louvo generates a realistic preview of you with that hairstyle.\n\nLouvo uses advanced AI image generation to create realistic results while keeping your facial features and overall appearance as close to the original photo as possible. The goal is simple: **try the hairstyle before you commit to it.**",
       tags: ["Next.js", "React", "TypeScript", "Fastify", "Postgres", "Stripe", "Fal.ai"],
       live: "https://www.louvo.app",
-      source: "https://github.com/Mudelkun/Hairify",
+      source: "https://github.com/Mudelkun/Louvo",
       poster: "assets/media/louvo-poster.jpg",
       /* The app's mark, copied from Hairify/web/public/luvo-mark.png. Shown on the detail page. */
       logo: "assets/media/louvo-logo.png",
