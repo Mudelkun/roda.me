@@ -140,7 +140,7 @@
   fill: currentColor;
   transition: transform .28s cubic-bezier(.2, .8, .3, 1);
 }
-.hero__cta:hover .hero__cta-i { transform: translateY(2px); }
+.hero__cta:hover .hero__cta-i { transform: scale(1.15); }
 
 .hero__copy .hero__copy-ok { display: none; }
 .hero__copy.is-done { border-color: var(--accent); background: var(--accent-wash); color: var(--accent-text); }
