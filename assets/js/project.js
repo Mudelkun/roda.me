@@ -8,9 +8,13 @@
   var UI = window.UI;
   var esc = UI.esc;
 
+  /* /louvo and /louvo.html name the project themselves; project.html takes ?p=<slug>. */
   function currentSlug() {
     var slug = new URLSearchParams(window.location.search).get("p");
-    return slug || (SITE.projects && SITE.projects[0] && SITE.projects[0].slug);
+    if (slug) return slug;
+    var file = decodeURIComponent(window.location.pathname.split("/").pop()).replace(/\.html$/, "");
+    if (file && file !== "project") return file;
+    return SITE.projects && SITE.projects[0] && SITE.projects[0].slug;
   }
 
   function findProject(slug) {
@@ -323,7 +327,7 @@
     var card = "";
     if (next) {
       card = '' +
-        '<a class="pnext__card" href="project.html?p=' + encodeURIComponent(next.slug) + '">' +
+        '<a class="pnext__card" href="' + esc(UI.projectUrl(next.slug)) + '">' +
           '<span><span class="pnext__label">Next project</span><br><span class="pnext__name">' + esc(next.title) + "</span></span>" +
           '<img class="pnext__thumb" src="' + esc(next.poster || "") + '" alt="" data-frame>' +
           '<span aria-hidden="true">→</span>' +
@@ -478,7 +482,7 @@
 
   function notFound() {
     var links = (SITE.projects || []).map(function (p) {
-      return '<li><a href="project.html?p=' + encodeURIComponent(p.slug) + '">' + esc(p.title) + "</a></li>";
+      return '<li><a href="' + esc(UI.projectUrl(p.slug)) + '">' + esc(p.title) + "</a></li>";
     }).join("");
 
     return '<div class="shell" style="padding-block:60px;display:flex;flex-direction:column;gap:14px">' +
@@ -500,6 +504,11 @@
     if (!project) {
       root.innerHTML = notFound();
       return;
+    }
+
+    /* An old project.html?p=<slug> link shows the clean address instead; that page exists. */
+    if (/project\.html$/.test(window.location.pathname) && UI.projectUrl(project.slug).indexOf(".html") === -1) {
+      history.replaceState(null, "", UI.projectUrl(project.slug) + window.location.hash);
     }
 
     var owner = (SITE.profile && SITE.profile.name) || "";

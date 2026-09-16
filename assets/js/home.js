@@ -16,7 +16,7 @@
   }
 
   function projectUrl(project) {
-    return "project.html?p=" + encodeURIComponent(project.slug);
+    return UI.projectUrl(project.slug);
   }
 
   function cardMedia(project) {

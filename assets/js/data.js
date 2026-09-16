@@ -86,7 +86,7 @@ window.SITE = {
 
   projects: [
     {
-      slug: "project-one",
+      slug: "formel",
       index: "01",
       title: "Formel: School management plateforme",
       pitch: "One-line pitch — what it is, and who it is for.",

@@ -322,10 +322,20 @@
     });
   }
 
+  /* A project lives at rodarly.me/<slug>, served from the <slug>.html that
+     tools/build-pages.js writes. Local servers (Live Server, http.server) and file://
+     don't map an extensionless path to its .html, so there the link names the file. */
+  function projectUrl(slug) {
+    var host = window.location.hostname;
+    var local = window.location.protocol === "file:" || !host || host === "localhost" || host === "127.0.0.1";
+    return encodeURIComponent(slug) + (local ? ".html" : "");
+  }
+
   /* ---------- boot ---------- */
 
   window.UI = {
     esc: esc, el: el, $: $, $$: $$,
+    projectUrl: projectUrl,
     initMediaFallback: initMediaFallback,
     initBindings: initBindings
   };
