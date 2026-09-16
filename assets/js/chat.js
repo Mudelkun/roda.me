@@ -154,8 +154,15 @@
     var self = this;
 
     if (!SITE.chatEndpoint) {
-      return new Promise(function (resolve) {
-        setTimeout(function () { resolve(self.localAnswer(text)); }, 350);
+      // localAnswer matches on English keywords. With the French switch on, the
+      // question goes back through the translator first; the reply is written in
+      // English and the page's French layer picks it up where it lands.
+      var asked = window.I18N ? window.I18N.toSource(text) : Promise.resolve(text);
+
+      return asked.then(function (english) {
+        return new Promise(function (resolve) {
+          setTimeout(function () { resolve(self.localAnswer(english)); }, 350);
+        });
       });
     }
 

@@ -35,6 +35,44 @@ window.SITE = {
     graphRefreshSeconds: 60
   },
 
+  /* French switch. There is no French copy of this file and there never should be:
+     assets/js/i18n.js reads whatever text is on the page, translates the strings it
+     has not seen before, and caches them in the browser. Anything added below is
+     translated the first time someone flips the switch.
+       providers  - tried in order, first to answer wins. Both are public and key-less.
+       protect    - names that must survive untouched. Project tags, stack items, the
+                    profile name and the GitHub handle are protected automatically.
+       enabled    - false hides the switch and leaves the site English-only. */
+  translate: {
+    enabled: true,
+    lang: "fr",
+    source: "en",
+    providers: ["google", "mymemory"],
+    protect: ["Formel", "Louvo", "Rodarly", "École Horizon", "Mudelkun", "Hairify", "Fal.ai"],
+    /* Short labels carry no sentence for a translator to read, so a few come back
+       wrong: "May" as the verb, "Wed" as "marry". These are settled here; every
+       other string on the site is left to the provider. */
+    overrides: {
+      Jan: "janv.", Feb: "févr.", Mar: "mars", Apr: "avr.", May: "mai", Jun: "juin",
+      Jul: "juil.", Aug: "août", Sep: "sept.", Oct: "oct.", Nov: "nov.", Dec: "déc.",
+      Mon: "lun.", Wed: "mer.", Fri: "ven.",
+      Contributions: "Contributions",
+      "Current streak": "Série en cours",
+      "Longest streak": "Plus longue série",
+      "Commit history · live": "Historique des commits · en direct",
+      "What's his stack?": "Quelles technologies utilise-t-il ?",
+      "Full-stack developer": "Développeur full-stack",
+      /* {n} stands in for a number that changes, so one line covers every count. */
+      "{n} contributions in the last 12 months": "{n} contributions sur les 12 derniers mois",
+      "{n} GitHub contributions in the last 12 months": "{n} contributions GitHub sur les 12 derniers mois",
+      "last 12 months": "sur 12 mois",
+      "so far": "à ce jour",
+      "rolling": "glissant",
+      "consecutive": "consécutifs",
+      "best day · {n}": "meilleur jour · {n}"
+    }
+  },
+
   /* Where the "ask me a question" panel posts.
      Leave null and the panel answers locally from the content in this file.
      Set to your own endpoint: POST { message, history } -> { reply }. */

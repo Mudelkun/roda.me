@@ -431,6 +431,9 @@
     tip = document.createElement("div");
     tip.className = "gh__tip";
     tip.setAttribute("aria-hidden", "true");
+    // One string per day under the cursor: left out of the French pass so sweeping
+    // the graph never turns into 365 translation requests.
+    tip.setAttribute("translate", "no");
     card.appendChild(tip);
 
     nodes.grid.addEventListener("pointerover", function (e) {

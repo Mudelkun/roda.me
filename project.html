@@ -37,6 +37,11 @@
     </nav>
 
     <div class="header__tools">
+      <button class="lang-toggle" type="button" aria-pressed="false" aria-label="Traduire le site en français" data-tip="English / Français" translate="no">
+        <span class="lang-toggle__thumb" aria-hidden="true"></span>
+        <span class="lang-toggle__face lang-toggle__face--en" aria-hidden="true">EN</span>
+        <span class="lang-toggle__face lang-toggle__face--fr" aria-hidden="true">FR</span>
+      </button>
       <button class="theme-toggle" type="button" aria-pressed="false" aria-label="Switch to light mode">
         <span class="theme-toggle__thumb" aria-hidden="true"></span>
         <svg class="theme-toggle__icon theme-toggle__icon--sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
@@ -72,7 +77,9 @@
 </dialog>
 
 <script src="assets/js/data.js"></script>
+<script src="assets/js/i18n-cache.js"></script>
 <script src="assets/js/ui.js"></script>
+<script src="assets/js/i18n.js"></script>
 <script src="assets/js/brand.js"></script>
 <script src="assets/js/icons.js"></script>
 <script src="assets/js/chat.js"></script>
