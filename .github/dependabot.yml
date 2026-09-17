@@ -1,0 +1,10 @@
+# Weekly pull requests for dependency updates, grouped into one, plus security fixes as soon as they're published.
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      dependencies:
+        patterns: ["*"]

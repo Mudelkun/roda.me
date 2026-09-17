@@ -32,7 +32,6 @@
 
     <nav class="nav" id="site-nav" aria-label="Sections">
       <a class="nav__link" href="#about">About</a>
-      <a class="nav__link" href="#activity">Activity</a>
       <a class="nav__link" href="#projects">Projects</a>
       <a class="nav__link" href="#contact">Contact me</a>
     </nav>
@@ -125,11 +124,13 @@
           </div>
 
           <p class="sr" id="hero-copy-live" role="status"></p>
+
+          <div class="hero__ask" id="hero-ask" data-reveal style="--d:.3s"></div>
         </div>
       </div>
 
       <!-- live GitHub activity -->
-      <aside class="gh" id="activity" aria-labelledby="gh-title" data-reveal style="--d:.3s">
+      <aside class="gh" id="activity" aria-labelledby="gh-title" data-reveal style="--d:.36s">
 
         <div class="gh__head">
           <h2 class="h-sub" id="gh-title">Commit history &middot; live</h2>
@@ -194,8 +195,13 @@
   <section class="projects" id="projects" aria-labelledby="projects-title">
     <div class="shell">
       <div class="projects__head">
-        <h2 class="h-sec" id="projects-title">Projects</h2>
-        <p class="note">Two builds, with demo video.</p>
+        <p class="projects__eyebrow">
+          <span class="projects__rule" aria-hidden="true"></span>
+          <span><span aria-hidden="true">★</span> Selected work</span>
+          <span class="projects__rule" aria-hidden="true"></span>
+        </p>
+        <h2 class="projects__title" id="projects-title"><span class="projects__word">Projects</span></h2>
+        <p class="lede projects__sub">Real products, designed, built and shipped end to end.</p>
       </div>
 
       <ul class="projects__list" id="projects-list">
@@ -244,7 +250,9 @@
         <p class="sr" id="contact-copy-live" role="status"></p>
       </div>
 
-      <div class="contact__chat" id="chat-mount"></div>
+      <div class="contact__ask">
+        <div id="contact-ask"></div>
+      </div>
     </div>
   </section>
 </main>
@@ -259,6 +267,7 @@
 <script src="assets/js/ui.js"></script>
 <script src="assets/js/i18n.js"></script>
 <script src="assets/js/brand.js"></script>
+<script src="assets/js/icons.js"></script>
 <script src="assets/js/github.js"></script>
 <script src="assets/js/chat.js"></script>
 <script src="assets/js/hero.js"></script>

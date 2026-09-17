@@ -51,7 +51,10 @@
 
 /* ---------- controls ---------- */
 
-[data-brand] .btn {
+/* Branded buttons belong to the project page. On the home page every card keeps the
+   portfolio's own buttons, so the row of cards moves as one. */
+
+html[data-brand] .btn {
   position: relative;
   isolation: isolate;
   overflow: hidden;
@@ -69,21 +72,21 @@
     box-shadow .5s var(--brand-ease),
     background-color .3s ease, border-color .3s ease, color .3s ease;
 }
-[data-brand] .btn:hover {
+html[data-brand] .btn:hover {
   transform: translateY(-2px);
   border-color: rgb(var(--brand-accent-rgb) / .5);
   background: rgb(var(--brand-accent-rgb) / .08);
   color: var(--fg);
 }
-[data-brand] .btn:active { transform: translateY(0); transition-duration: .1s; }
+html[data-brand] .btn:active { transform: translateY(0); transition-duration: .1s; }
 
-[data-brand] .btn--primary {
+html[data-brand] .btn--primary {
   background: var(--accent);
   border-color: transparent;
   color: var(--accent-ink);
   box-shadow: 0 12px 32px -12px rgb(var(--brand-accent-rgb) / .8), inset 0 1px 0 rgb(255 255 255 / .28);
 }
-[data-brand] .btn--primary:hover {
+html[data-brand] .btn--primary:hover {
   background: var(--accent);
   color: var(--accent-ink);
   border-color: transparent;
@@ -91,16 +94,16 @@
   box-shadow: 0 18px 44px -12px rgb(var(--brand-accent-rgb) / .95), inset 0 1px 0 rgb(255 255 255 / .32);
 }
 /* A light sweep across the primary action on hover. */
-[data-brand] .btn--primary::after {
+html[data-brand] .btn--primary::after {
   content: "";
   position: absolute; inset: 0; z-index: -1;
   background: linear-gradient(100deg, transparent 30%, rgb(255 255 255 / .38) 50%, transparent 70%);
   transform: translateX(-120%);
   transition: transform .9s var(--brand-ease);
 }
-[data-brand] .btn--primary:hover::after { transform: translateX(120%); }
+html[data-brand] .btn--primary:hover::after { transform: translateX(120%); }
 
-[data-brand] .btn--ghost { border-color: rgb(var(--brand-accent-rgb) / .45); background: transparent; color: var(--accent-text); }
+html[data-brand] .btn--ghost { border-color: rgb(var(--brand-accent-rgb) / .45); background: transparent; color: var(--accent-text); }
 
 [data-brand] .pill {
   font-weight: 500;
@@ -132,54 +135,34 @@
 }
 [data-brand] [data-slides] .bslides__img.is-active { transform: scale(1.035); }
 
-[data-brand] .bdots__dot.is-active {
-  background: linear-gradient(90deg, var(--accent), var(--brand-accent-2));
-  border-color: transparent;
-}
-
 /* ====================================================================
    Home page: the branded project card
    ==================================================================== */
 
 .pcard[data-brand] {
-  --mx: 80%; --my: 12%;
   position: relative;
   isolation: isolate;
   overflow: hidden;
-  gap: 34px;
-  padding: 28px;
-  border: 1px solid var(--line-soft);
 }
 
+/* The headline and the name under it stay in the portfolio's type, so the
+   cards read as one row; the pitch and the buttons carry the brand's own. */
 .pcard[data-brand] .pcard__title {
-  font: 800 clamp(20px, 2.4vw, 26px)/1.05 Archivo, sans-serif;
+  font: 800 clamp(18px, 1.6vw, 22px)/1.05 Archivo, sans-serif;
   letter-spacing: -.02em;
   text-transform: uppercase;
 }
-.pcard[data-brand] .btitle__tail { font-style: normal; }
+.pcard[data-brand] :is(.pcard__name, .pcard__name *) { font-family: Archivo, sans-serif; }
+.pcard[data-brand] .btitle__tail { font-style: normal; padding: 0; }
 .pcard[data-brand] .pcard__title a { transition: opacity .3s ease; }
 .pcard[data-brand] .pcard__title a:hover { opacity: .88; }
-.pcard[data-brand] .lede { font-size: 15px; line-height: 1.7; }
-.pcard[data-brand] .pcard__body { gap: 14px; }
-.pcard[data-brand] .pcard__actions { padding-top: 8px; }
-.pcard[data-brand] .btn { border-radius: 0; }
-.pcard[data-brand] .btn--primary,
-.pcard[data-brand] .btn--primary:hover { box-shadow: inset 0 1px 0 rgb(255 255 255 / .28); }
+.pcard[data-brand] .pcard__pitch { font-size: 14px; line-height: 1.6; }
+.pcard[data-brand] .pcard__stack .pill { font-size: 11px; padding: 4px 10px; }
+.pcard[data-brand] .btn { font-family: Archivo, sans-serif; }
 
 .pcard[data-brand] .pcard__frame {
-  border-color: var(--line);
   background: var(--brand-surface);
-  transform: perspective(1100px) rotateX(var(--rx)) rotateY(var(--ry));
   box-shadow: 0 30px 60px -30px var(--brand-shadow), 0 0 0 1px var(--brand-sheen);
-  transition: transform .8s var(--brand-ease), box-shadow .6s var(--brand-ease);
-  will-change: transform;
-}
-.pcard[data-brand] .pcard__frame.is-pointer {
-  transition: transform .18s linear;
-}
-
-@media (max-width: 860px) {
-  .pcard[data-brand], .pcard[data-brand]:nth-child(even) { padding: 16px; gap: 18px; }
 }
 
 /* ====================================================================
@@ -328,17 +311,7 @@ html[data-brand] .layer { border-bottom-color: var(--line-soft); padding-block: 
 html[data-brand] .toc a { transition: color .3s ease, border-color .3s ease, background-color .3s ease; }
 html[data-brand] .toc a[aria-current="true"] { color: var(--fg); border-color: rgb(var(--brand-accent-rgb) / .6); }
 
-html[data-brand] .chat {
-  border-width: 1px;
-  border-color: var(--line-soft);
-  border-radius: var(--brand-radius);
-  background: var(--brand-surface);
-}
-html[data-brand] .chat__msg--user { border-color: rgb(var(--brand-accent-rgb) / .45); }
-html[data-brand] .chat__input { border-radius: 999px; border-color: var(--line-soft); }
-html[data-brand] .chat__input:focus { border-color: rgb(var(--brand-accent-rgb) / .6); outline: none; box-shadow: 0 0 0 4px rgb(var(--brand-accent-rgb) / .12); }
-html[data-brand] .chat__send { padding: 0; }
-html[data-brand] .chat__send:hover { transform: translateY(-1px) rotate(-8deg); }
+html[data-brand] .pask { border-radius: var(--brand-radius); }
 
 /* ---------- next, lightbox, action bar ---------- */
 
@@ -369,5 +342,4 @@ html[data-brand] .lightbox[open] .lightbox__in { animation: brand-pop .5s var(--
     backdrop-filter: blur(16px);
     border-top-color: var(--line-soft);
   }
-  html[data-brand] .chat { border-radius: var(--brand-radius) var(--brand-radius) 0 0; border-width: 1px 0 0; }
 }

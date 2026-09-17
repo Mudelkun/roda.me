@@ -1,0 +1,16 @@
+{
+  "name": "rodarly-me",
+  "private": true,
+  "description": "Rodarly Perilus's portfolio: a static site plus a small server for the chat panel.",
+  "scripts": {
+    "start": "node server.mjs",
+    "dev": "node --env-file-if-exists=.env --watch server.mjs"
+  },
+  "engines": {
+    "node": "24.x"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.126.0",
+    "pg": "^8.23.0"
+  }
+}

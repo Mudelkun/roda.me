@@ -317,7 +317,7 @@
         (media ? '<div class="pstage__media">' + media + toc + "</div>" : "") +
         '<div class="pstage__text">' +
           (media ? "" : toc) + main + screens +
-          '<div id="chat-mount"></div>' +
+          '<div class="pask" id="ask-mount"></div>' +
         "</div>" +
       "</div>";
   }
@@ -341,7 +341,10 @@
       '<div class="actionbar">' +
         (project.live ? '<a class="btn btn--primary" href="' + esc(project.live) + '" target="_blank" rel="noopener">Try it live →</a>' : "") +
         (project.source ? '<a class="btn" href="' + esc(project.source) + '" target="_blank" rel="noopener">Source</a>' : "") +
-        '<button class="btn btn--ask" type="button" id="ask-btn" aria-label="Ask about this build">Ask</button>' +
+        '<button class="btn btn--ask" type="button" id="ask-btn" aria-label="Ask my AI about this build">' +
+          '<span class="aiorb aiorb--xs" aria-hidden="true"><svg class="aiorb__spark" viewBox="0 0 24 24"><path d="M12 1.5c.5 5.6 4.9 10 10.5 10.5-5.6.5-10 4.9-10.5 10.5C11.5 16.9 7.1 12.5 1.5 12 7.1 11.5 11.5 7.1 12 1.5Z"/></svg></span>' +
+          '<span>Ask AI</span>' +
+        "</button>" +
       "</div>";
   }
 
@@ -536,15 +539,17 @@
     initLightbox(project);
     if (window.Brand) Brand.slides(root);
 
-    var chat = window.mountChat(document.getElementById("chat-mount"), {
-      id: "chat-project",
-      title: "Ask about this build",
-      blurb: "Answers drawn from this project's write-up.",
-      project: project,
-      summoned: true
+    var name = project.title.split(":")[0].trim();
+    AskAI.init({ project: project });
+    AskAI.bar(document.getElementById("ask-mount"), {
+      id: "ask-project",
+      label: "Ask my AI about " + name,
+      hint: "Answers from the write-up + my résumé",
+      placeholder: "Ask anything about " + name + "…",
+      chips: ["What does " + name + " do?", "What's the stack behind " + name + "?", "What did you learn building " + name + "?"]
     });
 
     var ask = document.getElementById("ask-btn");
-    if (ask) ask.addEventListener("click", function () { chat.summon(); });
+    if (ask) ask.addEventListener("click", function () { AskAI.open(ask); });
   });
 })();

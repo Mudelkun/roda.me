@@ -60,7 +60,7 @@ window.SITE = {
       "Current streak": "Série en cours",
       "Longest streak": "Plus longue série",
       "Commit history · live": "Historique des commits · en direct",
-      "What's his stack?": "Quelles technologies utilise-t-il ?",
+      "What's your stack?": "Quelles technologies utilisez-vous ?",
       "Full-stack developer": "Développeur full-stack",
       /* {n} stands in for a number that changes, so one line covers every count. */
       "{n} contributions in the last 12 months": "{n} contributions sur les 12 derniers mois",
@@ -73,25 +73,44 @@ window.SITE = {
     }
   },
 
-  /* Where the "ask me a question" panel posts.
-     Leave null and the panel answers locally from the content in this file.
-     Set to your own endpoint: POST { message, history } -> { reply }. */
-  chatEndpoint: null,
+  /* Where the "ask me a question" panel posts: server.mjs answers there with Claude,
+     using profile.md. Set to null and the panel answers locally from this file
+     by keyword, which is also what it does whenever the endpoint can't answer.
+     POST { message, history, project } -> { reply } | { limited } | { fallback } */
+  chatEndpoint: "/api/chat",
 
+  /* Chat replies make links clickable only for these sites, plus this site, my GitHub,
+     my Instagram and each project's live and source links. Anything else the AI writes
+     stays plain text. */
+  chatLinkHosts: ["rodarly.me", "fierbout.com"],
+
+  /* The first three are the chips under the hero's prompt bar; all four open the
+     chat panel when it's empty. */
   chatSuggestions: [
-    "What's his stack?",
-    "Open to work?",
+    "What have you built?",
+    "What's your stack?",
+    "Are you open to work?",
     "Tell me about Formel"
+  ],
+
+  /* Rotated through the hero's prompt bar where the placeholder would be. */
+  chatExamples: [
+    "Ask about the school platform I built…",
+    "Ask what I learned building Louvo…",
+    "Ask which languages I speak…",
+    "Ask if I'm open to full-time roles…"
   ],
 
   projects: [
     {
       slug: "formel",
       index: "01",
-      title: "Formel: School management platform",
-      pitch: "A complete school management platform running my family’s private school in Haiti, used by more than 400 people.",
+      title: "Formel: School management system",
+      pitch: "A complete school management web application that I built alongside my father for our family’s private school in Haiti. It brings the school’s core operations together in one platform, with dedicated portals for administrators, teachers, students, and parents.",
       summary: "Formel is the biggest project I’ve worked on so far. It is a complete school management platform built for my family’s private school in Haiti. I created it to make it easier to manage and operate the school remotely from Canada.\n\nThe platform was officially implemented in April, with the school’s existing data transferred from Excel into the system. It now serves more than 400 users, and for the 2026–2027 school year, we made a major update by introducing dedicated portals for students, teachers, and parents.",
       tags: ["React", "TypeScript", "Node.js", "Express", "PostgreSQL", "Drizzle ORM"],
+      /* The status line on the home card. The first item gets the status dot. */
+      meta: ["Live", "400+ users", "Private codebase"],
       /* Private school system: no public URL or repo, so no live/source buttons. */
       poster: "assets/media/formel/01-dashboard.jpg",
       /* The screenshots are light UI: a dark box around them keeps them easy to spot. */
@@ -132,7 +151,7 @@ window.SITE = {
       /* Copied from formel-scale/frontend/public. The reverse mark is used in both themes. */
       logo: "assets/media/formel-logo-reverse.png",
       logoRound: true,
-      facts: { Role: "Sole developer", Timeline: "Feb – Apr 2026", Status: "In production" },
+      facts: { Role: "Full-stack developer", Timeline: "Feb – Apr 2026", Status: "Live" },
       description: "Formel is a complete school management platform I built alongside my father for our family’s private school in Haiti. I handled the software development, while my father provided the real-world context and helped define the features the school needed.\n\nThe platform was created to replace paper-based and Excel workflows with one centralized system that can be managed remotely from Canada. It now brings together the school’s core operations and includes dedicated portals for administrators, teachers, students, and parents. Formel was officially implemented in April and now supports more than 400 users.",
       /* Features by area. The detail page shows one area at a time as tabs.
          icon: a key from assets/js/icons.js; short: the tab label. */
@@ -202,16 +221,17 @@ window.SITE = {
     {
       slug: "louvo",
       index: "02",
-      title: "Louvo: AI hairstyle try-on website",
-      pitch: "An AI hairstyle try-on — see the haircut on your own face before you are sitting in the chair.",
+      title: "Louvo: AI hairstyle try-on app",
+      pitch: "An AI-powered web application that lets anyone see what they could look like with a different hairstyle before actually getting it. Louvo uses advanced AI image editing to create realistic previews of you with different hairstyles.",
       summary: "Louvo is a simple AI-powered app that lets anyone see what they could look like with a different hairstyle before actually getting it. Just upload a photo of yourself, choose a hairstyle, and Louvo generates a realistic preview of you with that hairstyle.\n\nLouvo uses advanced AI image generation to create realistic results while keeping your facial features and overall appearance as close to the original photo as possible. The goal is simple: **try the hairstyle before you commit to it.**",
       tags: ["Next.js", "React", "TypeScript", "Fastify", "Postgres", "Stripe", "Fal.ai"],
+      meta: ["Live", "Open source"],
       live: "https://www.louvo.app",
       source: "https://github.com/Mudelkun/Louvo",
       poster: "assets/media/louvo-poster.jpg",
       /* The app's mark, copied from Hairify/web/public/luvo-mark.png. Shown on the detail page. */
       logo: "assets/media/louvo-logo.png",
-      facts: { Role: "Solo build", Timeline: "2026", Domain: "Louvo.app" },
+      facts: { Role: "Full-stack developer", Timeline: "2026", Domain: "Louvo.app" },
       /* Louvo's type and shape (Instrument Serif + Inter, 20px plates) with the
          portfolio's own colours. Add a `colors` block to draw a card in its product's
          palette instead - see assets/js/brand.js for the keys. */
@@ -245,7 +265,8 @@ window.SITE = {
       screens: [
         { src: "assets/media/louvo-poster.jpg", caption: "The home page is the try-on — upload box on the left, a real before-and-after beside it" },
         { src: "assets/media/louvo-screen-2.jpg", caption: "The catalogue: sixty-four cuts, filterable by audience, texture and shape" },
-        { src: "assets/media/louvo-screen-3.jpg", caption: "A haircut's own page — four angles, four hair types, its own URL and og:image" }
+        { src: "assets/media/louvo-screen-3.jpg", caption: "A haircut's own page — four angles, four hair types, its own URL and og:image" },
+        { src: "assets/media/louvo-screen-4.png", caption: "The result: drag the handle to wipe between your photo and the new cut, then download or share it" }
       ]
     }
   ]

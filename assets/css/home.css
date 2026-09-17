@@ -152,6 +152,10 @@
   100% { transform: scale(1); opacity: 1; }
 }
 
+/* ---------- ask my AI ---------- */
+
+.hero__ask { margin-top: 10px; max-width: 560px; }
+
 /* ---------- scroll cue ---------- */
 
 .hero__scroll {
@@ -525,20 +529,90 @@
 
 /* ---------- projects ---------- */
 
-.projects { border-bottom: 1px solid var(--line-soft); padding-block: 34px 40px; }
+.projects { position: relative; isolation: isolate; border-bottom: 1px solid var(--line-soft); padding-block: 64px 56px; }
 
-.projects__head { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; margin-bottom: 22px; }
+.projects__head {
+  position: relative;
+  display: flex; flex-direction: column; align-items: center;
+  gap: 14px;
+  margin-bottom: 44px;
+  text-align: center;
+}
+/* A faint accent light behind the title, the same warmth as the hero. */
+.projects__head::before {
+  content: "";
+  position: absolute; left: 50%; top: 50%; z-index: -1;
+  width: min(640px, 100%); height: 180px;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(closest-side, var(--accent-wash), transparent);
+  opacity: .55;
+  pointer-events: none;
+}
+.projects__eyebrow {
+  display: flex; align-items: center; gap: 14px;
+  margin: 0;
+  font: 800 11px Archivo, sans-serif;
+  letter-spacing: .26em;
+  text-transform: uppercase;
+  color: var(--accent-text);
+}
+.projects__rule {
+  width: clamp(36px, 9vw, 120px); height: 1px;
+  background: linear-gradient(to left, var(--accent), transparent);
+  opacity: .6;
+}
+.projects__rule:last-child { background: linear-gradient(to right, var(--accent), transparent); }
 
-.projects__list { display: flex; flex-direction: column; gap: 20px; list-style: none; margin: 0; padding: 0; }
+.projects__title {
+  margin: 0;
+  font: 800 clamp(44px, 6.4vw, 84px)/.86 Archivo, sans-serif;
+  letter-spacing: -.045em;
+  text-transform: uppercase;
+}
+
+/* Letters that react to the cursor (home.js). The real word stays in the heading for
+   screen readers and the FR switch; the letters are drawn from it. */
+.projects__title.is-live { position: relative; }
+.projects__title.is-live .projects__word {
+  position: absolute;
+  width: 1px; height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.projects__letters { display: inline-block; }
+.projects__group { display: inline-block; white-space: nowrap; }
+.projects__letter {
+  --p: 0;
+  display: inline-block;
+  transform-origin: 50% 85%;
+  will-change: transform;
+  color: color-mix(in oklab, var(--accent-text) calc(var(--p) * 100%), currentColor);
+  text-shadow: 0 .04em .28em color-mix(in oklab, var(--accent) calc(var(--p) * 55%), transparent);
+}
+.projects__sub { font-size: 16px; max-width: 46ch; }
+
+/* Upright cards, two to a row: screenshot on top, the name and the details under it. */
+.projects__list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(28px, 4vw, 56px);
+  max-width: 1160px;
+  list-style: none;
+  margin: 0 auto;
+  padding: 0 0 12px 12px; /* room for the offset box, which sits down-left */
+}
+.projects__list > .note { grid-column: 1 / -1; }
 
 .pcard {
   --pcard-ink: var(--fg);
-  display: grid;
-  grid-template-columns: minmax(0, 420px) minmax(0, 1fr);
-  gap: 22px;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
   border: 1px solid var(--line);
   border-radius: 16px;
-  padding: 18px;
+  padding: 10px;
+  background: var(--bg);
   cursor: pointer;
   /* Offset box behind the card: always there in a soft tint. */
   box-shadow: -6px 6px 0 var(--line);
@@ -556,20 +630,21 @@
     box-shadow: -12px 12px 0 var(--pcard-ink);
   }
 }
-.pcard:nth-child(even) { grid-template-columns: minmax(0, 1fr) minmax(0, 420px); }
-.pcard:nth-child(even) .pcard__media { order: 2; }
 
-.pcard__media { display: flex; flex-direction: column; gap: 7px; min-width: 0; }
+/* ----- media ----- */
+
+.pcard__media { position: relative; min-width: 0; }
 
 .pcard__frame {
   position: relative;
-  aspect-ratio: 16 / 9;
-  border: 1px solid var(--line);
+  display: block;
+  aspect-ratio: 16 / 10;
+  border: 1px solid var(--line-soft);
   border-radius: 10px;
   background: var(--fill);
   overflow: hidden;
 }
-.pcard__frame video, .pcard__frame img { width: 100%; height: 100%; object-fit: cover; }
+.pcard__frame video, .pcard__frame img { width: 100%; height: 100%; object-fit: cover; object-position: top center; }
 
 .pcard__poster {
   position: absolute; inset: 0;
@@ -584,35 +659,45 @@
   opacity: .75;
 }
 
-.pcard__frame--slides { display: block; cursor: pointer; }
+/* ----- body ----- */
 
-.pcard__foot { display: flex; align-items: center; justify-content: flex-end; gap: 12px; min-height: 20px; }
-
-.bdots { display: flex; align-items: center; gap: 7px; flex: none; }
-.bdots__dot {
-  position: relative;
-  width: 8px; height: 8px; padding: 0;
-  border: 1px solid var(--line); border-radius: 8px;
-  background: transparent;
-  cursor: pointer;
-  transition: width .4s ease, background-color .3s ease, border-color .3s ease;
+.pcard__body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: 12px;
+  min-width: 0;
+  padding: 16px 8px 6px;
 }
-.bdots__dot::before { content: ""; position: absolute; inset: -10px -4px; }
-.bdots__dot:hover { border-color: var(--accent); }
-.bdots__dot.is-active { width: 24px; background: var(--accent); border-color: var(--accent); }
 
-.pcard__body { display: flex; flex-direction: column; gap: 11px; min-width: 0; }
-.pcard__summary { display: flex; flex-direction: column; gap: 10px; }
-.pcard__summary strong { color: var(--fg); font-weight: 600; }
+.pcard__head { display: flex; align-items: center; gap: 12px; min-width: 0; }
+
+.pcard__logo {
+  width: 36px; height: 36px;
+  flex: none;
+  border-radius: 9px;
+  object-fit: cover;
+}
+.pcard__logo--round { border-radius: 50%; }
+
+.pcard__names { display: flex; flex-direction: column; gap: 6px; min-width: 0; flex: 1; }
 
 .pcard__title {
-  font: 800 clamp(20px, 2.4vw, 26px)/1.05 Archivo, sans-serif;
+  font: 800 clamp(18px, 1.6vw, 22px)/1.05 Archivo, sans-serif;
   letter-spacing: -.02em;
   text-transform: uppercase;
   margin: 0;
 }
-/* "Name: descriptor" titles - the descriptor in the accent gradient, branded or not. */
-.pcard__title .btitle__tail {
+.pcard__link { text-decoration: none; }
+
+.pcard__name {
+  font: 700 10px/1.2 Archivo, sans-serif;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  margin: 0;
+}
+/* The product name in the accent gradient, branded or not. */
+.pcard__name .btitle__tail {
   font-style: normal;
   background-image: linear-gradient(100deg, var(--brand-grad-a) 0%, var(--brand-grad-b) 100%);
   -webkit-background-clip: text;
@@ -620,11 +705,72 @@
   color: transparent;
   -webkit-box-decoration-break: clone;
   box-decoration-break: clone;
-  padding: 0 .08em .06em 0;
 }
 
+/* A quiet arrow that slides forward when the card is hovered. */
+.pcard__go {
+  flex: none;
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 34px; height: 34px;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  color: var(--fg-dim);
+  font-size: 15px;
+  transition: transform .35s cubic-bezier(.34, 1.8, .5, 1), background-color .2s ease, border-color .2s ease, color .2s ease;
+}
+@media (hover: hover) {
+  .projects__list .pcard:hover .pcard__go {
+    transform: translateX(3px) rotate(-45deg);
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--accent-ink);
+  }
+}
 
-.pcard__actions { display: flex; gap: 9px; flex-wrap: wrap; margin-top: auto; padding-top: 4px; }
+.pcard__pitch { font-size: 14px; line-height: 1.6; max-width: 60ch; }
+
+.pcard__meta {
+  display: flex; flex-wrap: wrap; align-items: center;
+  gap: 4px 8px;
+  margin: 0;
+  font-size: 12px;
+  color: var(--fg-faint);
+}
+.pcard__status { display: inline-flex; align-items: center; gap: 7px; color: var(--fg); font-weight: 600; }
+.pcard__dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-wash);
+}
+.pcard__sep { color: var(--fg-faint); }
+
+.pcard__stack { gap: 6px; }
+.pcard__stack .pill { font-size: 11px; padding: 4px 10px; border-color: var(--line-soft); color: var(--fg-dim); }
+.pcard__stack .pill__logo { width: 13px; height: 13px; flex: none; }
+
+/* Pinned to the foot of the card, so both cards' buttons line up across the row. */
+.pcard__actions {
+  display: flex; gap: 9px; flex-wrap: wrap;
+  margin-top: auto;
+  padding-top: 14px;
+  border-top: 1px solid var(--line-soft);
+}
+
+/* "View more": the accent fills in from the left and the arrow steps forward. */
+.pcard__more { isolation: isolate; overflow: hidden; }
+.pcard__more::before {
+  content: "";
+  position: absolute; inset: 0; z-index: -1;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  transition: transform .4s cubic-bezier(.2, .8, .3, 1);
+}
+.pcard__arrow { display: inline-block; transition: transform .4s cubic-bezier(.34, 1.8, .5, 1); }
+.pcard__more:is(:hover, :focus-visible) { color: var(--accent-ink); border-color: var(--accent); }
+.pcard__more:is(:hover, :focus-visible)::before { transform: scaleX(1); }
+.pcard__more:is(:hover, :focus-visible) .pcard__arrow { transform: translateX(4px); }
 
 /* ---------- contact ---------- */
 
@@ -632,16 +778,27 @@
 
 .contact__in {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 320px;
-  gap: 32px;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 480px);
+  gap: 40px;
   align-items: start;
 }
 
 .contact__copy { display: flex; flex-direction: column; gap: 14px; max-width: 420px; }
 .contact__actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-top: 4px; }
 
-@media (min-width: 861px) {
-  .contact__chat { position: sticky; top: 78px; }
+/* The contact card's own ground: a faint dusk behind the prompt bar. */
+.contact__ask {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: flex; flex-direction: column; gap: 10px;
+  padding: 22px;
+  border: 1px solid var(--line-soft);
+  border-radius: 22px;
+  background:
+    radial-gradient(60% 90% at 100% 0%, rgba(183, 156, 255, .12), transparent 70%),
+    radial-gradient(60% 90% at 0% 100%, rgba(255, 183, 77, .1), transparent 70%),
+    var(--fill);
 }
 
 /* ---------- mobile (3b) ---------- */
@@ -655,6 +812,7 @@
   }
 
   .hero__id { flex-direction: column; gap: 16px; }
+  .hero__text { align-self: stretch; }
   .hero__photo { width: 104px; height: 104px; }
   .hero__avail { width: 13px; height: 13px; right: 3px; bottom: 3px; }
   .hero__text { gap: 13px; }
@@ -669,13 +827,23 @@
   /* A tapped cell needs room to scale without clipping. */
   .gh__grid .gh__cell.is-picked { transform: scale(1.6); }
 
-  .pcard, .pcard:nth-child(even) { grid-template-columns: 1fr; gap: 12px; padding: 12px; }
-  .pcard:nth-child(even) .pcard__media { order: 0; }
-  .pcard__actions .btn { flex: 1 1 140px; }
+  .projects { padding-block: 44px 40px; }
+  .projects__head { gap: 12px; margin-bottom: 30px; }
+  .projects__eyebrow { font-size: 10px; gap: 10px; }
+  .projects__sub { font-size: 15px; }
+  .projects__list { grid-template-columns: minmax(0, 1fr); gap: 22px; padding: 0 0 6px 6px; }
+  .pcard { padding: 8px; border-radius: 16px; }
+  .pcard__frame { border-radius: 9px; }
+  .pcard__body { padding: 16px 8px 8px; gap: 12px; }
+  .pcard__head { gap: 12px; }
+  .pcard__go { display: none; }
+  .pcard__title { font-size: 20px; }
+  .pcard__pitch { font-size: 14.5px; }
+  .pcard__actions { padding-top: 14px; }
+  .pcard__actions .btn { flex: 1 1 130px; }
 
   .contact__in { grid-template-columns: 1fr; gap: 22px; }
+  .contact__ask { padding: 18px 16px; }
 
-  /* Room for the pull-up chat sheet. */
-  .contact { padding-bottom: 120px; }
-  .site-footer { padding-bottom: 110px; }
+  .hero__ask { margin-top: 22px; }
 }

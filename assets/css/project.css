@@ -474,6 +474,21 @@ button.pmedia__frame { cursor: zoom-in; }
 
 .actionbar { display: none; }
 
+/* "Ask my AI" at the end of the write-up. */
+.pask {
+  position: relative;
+  isolation: isolate;
+  margin-top: 36px;
+  padding: 22px;
+  border: 1px solid var(--line-soft);
+  border-radius: 22px;
+  background:
+    radial-gradient(60% 90% at 100% 0%, rgba(183, 156, 255, .12), transparent 70%),
+    radial-gradient(60% 90% at 0% 100%, rgba(255, 183, 77, .1), transparent 70%),
+    var(--fill);
+}
+@media (max-width: 860px) { .pask { padding: 18px 16px; } }
+
 /* ---------- mobile layout (4b) ---------- */
 
 @media (max-width: 980px) {
@@ -508,11 +523,21 @@ button.pmedia__frame { cursor: zoom-in; }
     border-top: 1px solid var(--line);
   }
   .actionbar .btn { flex: 1; padding-inline: 10px; }
-  .actionbar .btn--ask { flex: 0 0 auto; width: 52px; }
+  .actionbar .btn--ask {
+    flex: 0 0 auto;
+    gap: 8px;
+    padding: 0 14px 0 8px;
+    border: 1.5px solid transparent;
+    border-radius: 999px;
+    background:
+      linear-gradient(var(--ai-panel), var(--ai-panel)) padding-box,
+      conic-gradient(from var(--ai-angle), var(--ai-stops)) border-box;
+    color: var(--fg);
+  }
+  .actionbar .btn--ask .aiorb { width: 28px; height: 28px; }
+  /* The action bar has its own way to ask, so the floating launcher stays away. */
+  body.has-actionbar .aifab { display: none; }
 
   body.has-actionbar { padding-bottom: 84px; }
 
-  /* On the detail page the chat starts hidden and is summoned by "ask". */
-  .chat--summoned { transform: translateY(105%); }
-  .chat--summoned[data-open="true"] { transform: translateY(0); }
 }

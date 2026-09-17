@@ -3,3 +3,7 @@
 
 # local notes
 /project.md
+
+# server
+node_modules/
+.env
