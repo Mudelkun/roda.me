@@ -1,0 +1,355 @@
+<!doctype html>
+<!--
+  The source of assets/media/resume.pdf. Edit this file, then run:
+
+      node tools/build-resume.mjs
+
+  which prints it back to assets/media/resume.pdf with headless Chrome.
+
+  Sizes are in pt and match the printed page exactly, so keep them in pt if you
+  change them. Carlito is metric-compatible with Calibri: whichever of the two
+  the machine has, the line breaks come out the same.
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Rodarly Clavensky Perilus — Resume</title>
+    <style>
+      @page {
+        size: letter;
+        margin: 26pt 28.5pt;
+      }
+
+      :root {
+        --ink: #000;
+        --link: #1a4fa0;
+        --bar: #e9ebee;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        color: var(--ink);
+        font-family: Carlito, Calibri, sans-serif;
+        font-size: 9.9pt;
+        line-height: 13.7pt;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      a {
+        color: var(--link);
+      }
+
+      /* ---------- header ---------- */
+
+      .name {
+        margin: 0;
+        font-size: 23pt;
+        font-weight: 700;
+        font-variant: small-caps;
+        line-height: 1.1;
+        text-align: center;
+      }
+
+      .title {
+        margin: 1.5pt 0 0;
+        font-size: 11.5pt;
+        line-height: 1.2;
+        letter-spacing: 0.06em;
+        text-align: center;
+      }
+
+      .contact {
+        margin: 3pt 0 0;
+        font-size: 9.4pt;
+        line-height: 1.2;
+        text-align: center;
+      }
+
+      .contact .sep {
+        margin: 0 3pt;
+      }
+
+      /* Drawn rather than written as 🇫🇷 / 🇬🇧: Windows has no flag emoji, so the
+         characters would print as "FR" and "GB" in little boxes. */
+      .flag {
+        position: relative;
+        top: 1pt;
+        width: 12pt;
+        height: 6pt;
+        margin-right: 2.5pt;
+      }
+
+      .lang + .lang {
+        margin-left: 5pt;
+      }
+
+      /* ---------- sections ---------- */
+
+      h2 {
+        margin: 4pt 0 1.5pt;
+        padding-left: 5.25pt;
+        background: var(--bar);
+        border-bottom: 0.75pt solid var(--ink);
+        font-size: 13.4pt;
+        font-weight: 700;
+        line-height: 20.25pt;
+        text-transform: uppercase;
+      }
+
+      p {
+        margin: 0;
+      }
+
+      .lede {
+        font-size: 10pt;
+        line-height: 13pt;
+      }
+
+      .lede + .lede {
+        margin-top: 3pt;
+      }
+
+      /* ---------- entries ---------- */
+
+      .entry + .entry {
+        margin-top: 3pt;
+      }
+
+      .row {
+        display: flex;
+        justify-content: space-between;
+        gap: 12pt;
+      }
+
+      .row.head {
+        font-size: 10.9pt;
+        font-weight: 700;
+        line-height: 14pt;
+      }
+
+      .row.sub {
+        font-style: italic;
+        line-height: 13pt;
+      }
+
+      ul {
+        margin: 0;
+        padding-left: 19.5pt;
+      }
+
+      li {
+        margin: 0;
+      }
+
+      .stack {
+        margin-top: 0.75pt;
+        padding-left: 19.5pt;
+        font-size: 9.6pt;
+      }
+
+      .stack b,
+      .skill b {
+        font-weight: 700;
+      }
+
+      .skill {
+        padding-left: 19.5pt;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1 class="name">Rodarly Clavensky Perilus</h1>
+    <p class="title">Software Engineer Intern</p>
+
+    <p class="contact">
+      Moncton, NB<span class="sep">|</span>+1 (819) 962-0657<span class="sep">|</span
+      ><a href="mailto:perilusrodarly@gmail.com">perilusrodarly@gmail.com</a
+      ><span class="sep">|</span><a href="https://www.rodarly.me/">www.rodarly.me</a
+      ><span class="sep">|</span
+      ><span class="lang"
+        ><svg class="flag" viewBox="0 0 3 2" aria-hidden="true">
+          <rect width="3" height="2" fill="#fff" />
+          <rect width="1" height="2" fill="#002654" />
+          <rect x="2" width="1" height="2" fill="#ed2939" /></svg
+        >French</span
+      ><span class="lang"
+        ><svg class="flag" viewBox="0 0 60 30" aria-hidden="true">
+          <clipPath id="uk"><path d="M30,15h30v15zv15h-30zh-30v-15zv-15h30z" /></clipPath>
+          <path d="M0,0v30h60v-30z" fill="#012169" />
+          <path d="M0,0 60,30M60,0 0,30" stroke="#fff" stroke-width="6" />
+          <path d="M0,0 60,30M60,0 0,30" clip-path="url(#uk)" stroke="#c8102e" stroke-width="4" />
+          <path d="M30,0v30M0,15h60" stroke="#fff" stroke-width="10" />
+          <path d="M30,0v30M0,15h60" stroke="#c8102e" stroke-width="6" /></svg
+        >English</span
+      >
+    </p>
+
+    <h2>Profile</h2>
+    <p class="lede">
+      Hello, I’m Rodarly, a 19-year-old computer science student. I taught myself how to code after
+      graduating high school in 2025 and quickly developed a passion for software engineering. Since
+      then, I’ve deployed real-world full-stack applications, including a complete school management
+      platform that my family’s private school currently relies on for its daily operations. I’m a
+      fast learner and a self-taught developer, constantly looking for ways to grow—not just as a
+      coder, but as an engineer who solves real problems while having a little fun along the way.
+    </p>
+    <p class="lede">
+      I strongly recommend visiting my portfolio at www.rodarly.me to explore my software projects in
+      more detail and see what I’ve been building.
+    </p>
+
+    <h2>Education</h2>
+    <div class="entry">
+      <div class="row head">
+        <span>BTS SIO — Software Solutions and Business Applications, CNED</span>
+        <span>2026 – 2028</span>
+      </div>
+    </div>
+    <div class="entry">
+      <div class="row head">
+        <span>High School Diploma</span>
+        <span>2025</span>
+      </div>
+    </div>
+
+    <h2>Projects</h2>
+    <div class="entry">
+      <div class="row head">
+        <span>School Management Web Application</span>
+        <span>Feb – Apr 2026</span>
+      </div>
+      <div class="row sub">
+        <span>Formel · rodarly.me/formel</span>
+        <span>In production</span>
+      </div>
+      <ul>
+        <li>
+          Replaced the paper and Excel workflows at my family’s private school in Haiti with the one
+          centralized system it now runs on
+        </li>
+        <li>
+          Now serves 400+ users every day — students, parents, teachers and administration — and is
+          administered remotely from Canada
+        </li>
+        <li>
+          Turned administrative work that used to take the school weeks — records, tuition billing,
+          grades, report cards — into hours
+        </li>
+        <li>
+          Designed the data model and four role-based portals — administration, teachers, students,
+          parents — each scoped to its own role
+        </li>
+        <li>
+          Built it as a secure system: authenticated accounts, per-user permissions, rate limiting and
+          an audit log of every action taken
+        </li>
+        <li>
+          Migrated years of existing records off spreadsheets mid-school-year, without interrupting
+          the school’s day-to-day operations
+        </li>
+      </ul>
+      <p class="stack">
+        <b>Tech stack:</b> React · TypeScript · Tailwind CSS · Node.js · Express · PostgreSQL ·
+        Drizzle ORM · Clerk · Cloudflare R2 · Railway
+      </p>
+    </div>
+
+    <div class="entry">
+      <div class="row head">
+        <span>AI Hairstyle Try-On Web Application</span>
+        <span>Aug 2026</span>
+      </div>
+      <div class="row sub">
+        <span>Louvo · louvo.app · rodarly.me/louvo</span>
+        <span>In production</span>
+      </div>
+      <ul>
+        <li>
+          Tuned the Fal.ai pipeline — image pre-processing, prompt tuning and caching — to cut cost
+          per preview without losing quality
+        </li>
+        <li>
+          Shipped the full product loop: Clerk authentication, Stripe checkout for preview packs,
+          credit accounting and image storage on R2
+        </li>
+        <li>
+          Built a catalogue of 64+ hairstyles with per-style pages and og:images, and run its
+          deployment, domain and production monitoring
+        </li>
+      </ul>
+      <p class="stack">
+        <b>Tech stack:</b> Next.js · React · TypeScript · Tailwind CSS · Fastify · PostgreSQL · Clerk
+        · Stripe · Cloudflare R2 · Fal.ai · Railway
+      </p>
+    </div>
+
+    <h2>Experience</h2>
+    <div class="entry">
+      <div class="row head">
+        <span>Ecole Fierbout (fierbout.com)</span>
+        <span>Sept 2025 – Present</span>
+      </div>
+      <div class="row sub">
+        <span>Technology Lead</span>
+        <span>Remote</span>
+      </div>
+      <ul>
+        <li>
+          Own all technology at my family’s private school: the Formel platform staff use daily, the
+          website and the deployments behind both
+        </li>
+        <li>
+          The person staff call when something breaks — first-line technical support, from diagnosing
+          the issue through to resolution
+        </li>
+        <li>
+          Manage the school’s security camera system and equipment, and decide what hardware the
+          school buys and keeps in supply
+        </li>
+        <li>
+          Recorded the 2+ hours of training videos staff learn the system from, so non-technical users
+          can work independently
+        </li>
+      </ul>
+    </div>
+
+    <div class="entry">
+      <div class="row head">
+        <span>McDonald’s</span>
+        <span>Aug 2025 – Jul 2026</span>
+      </div>
+      <div class="row sub">
+        <span>Crew Member</span>
+        <span>Canada</span>
+      </div>
+      <ul>
+        <li>
+          Worked full-time in a high-volume restaurant where service depends on teamwork, holding pace
+          and accuracy at peak hours
+        </li>
+        <li>
+          Held the job full-time while building and supporting the school’s software outside my
+          scheduled hours
+        </li>
+      </ul>
+    </div>
+
+    <h2>Skills</h2>
+    <p class="skill"><b>Languages:</b> JavaScript, HTML, CSS, SQL, Bash</p>
+    <p class="skill"><b>Frameworks:</b> Node.js, Express.js</p>
+    <p class="skill">
+      <b>Databases &amp; services:</b> PostgreSQL, Drizzle ORM, Clerk, Stripe, Cloudflare R2, Resend
+    </p>
+    <p class="skill"><b>Tools:</b> Git &amp; GitHub, Railway, Claude Code</p>
+    <p class="skill">
+      <b>Practices:</b> REST API design, deployment and production monitoring, data migration, user
+      training and support
+    </p>
+  </body>
+</html>

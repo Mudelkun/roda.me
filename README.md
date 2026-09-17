@@ -58,7 +58,8 @@ assets/js/i18n.js       the EN/FR switch
 assets/js/chat.js       "Ask my AI": prompt bars, the chat panel and its floating launcher
 assets/css/             base tokens and theme, then one stylesheet per area
 assets/media/           portrait, résumé, logos and screenshots
-tools/                  build-pages.js and warm-i18n.js; chat-log.mjs reads the saved chats
+tools/                  build-pages.js and warm-i18n.js; resume.html is the résumé's source,
+                        build-resume.mjs prints it; chat-log.mjs reads the saved chats
 ```
 
 ## Editing the content
@@ -77,7 +78,14 @@ on social media preview the right project. It also deletes pages for projects th
 whenever `project.html` changes. GitHub Pages, Netlify and Cloudflare Pages serve `/<slug>` from `<slug>.html`
 with no setup, and so does `server.mjs`.
 
-**Updating the résumé.** Replace `assets/media/resume.pdf`, keeping the same filename.
+**Updating the résumé.** Edit [`tools/resume.html`](tools/resume.html), then print it back to the PDF:
+
+```sh
+node tools/build-resume.mjs
+```
+
+Commit both: the HTML is the source, `assets/media/resume.pdf` is what the site links to. The layout is tuned to
+fill exactly one page, so check the page count after adding anything.
 
 **Updating what the chat knows.** Edit [`profile.md`](profile.md) and redeploy. The chat answers only from this file,
 so a fact that isn't written there gets "I don't know". Everything in it can show up in a reply, so treat it as public.
