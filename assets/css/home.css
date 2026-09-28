@@ -78,15 +78,6 @@
 }
 .hero__tags .pill:hover { transform: translateY(-1px); border-color: var(--accent); }
 
-/* Language flags: real colours, so no fill: currentColor like .pill__icon. */
-.pill__flag {
-  width: 16px; height: 11px;
-  flex: none;
-  border-radius: 2px;
-  margin-left: -2px;
-  box-shadow: 0 0 0 1px var(--line);
-}
-
 .hero__bio-wrap { display: flex; flex-direction: column; gap: 9px; align-items: flex-start; }
 
 .hero__bio { max-width: 560px; }
