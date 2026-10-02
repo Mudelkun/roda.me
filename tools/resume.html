@@ -105,15 +105,6 @@
         margin: 0;
       }
 
-      .lede {
-        font-size: 10pt;
-        line-height: 13pt;
-      }
-
-      .lede + .lede {
-        margin-top: 3pt;
-      }
-
       /* ---------- entries ---------- */
 
       .entry + .entry {
@@ -190,19 +181,6 @@
       >
     </p>
 
-    <h2>Profile</h2>
-    <p class="lede">
-      Hello, I’m Rodarly, a 19-year-old computer science student. I taught myself how to code after
-      graduating high school in 2025 and quickly developed a passion for software engineering. Since
-      then, I’ve deployed real-world full-stack applications, including a complete school management
-      platform that my family’s private school currently relies on for its daily operations. I’m a
-      fast learner and a self-taught developer, constantly looking for ways to grow—not just as a
-      coder, but as an engineer who solves real problems while having a little fun along the way.
-    </p>
-    <p class="lede">
-      I strongly recommend visiting my portfolio at www.rodarly.me to explore my software projects in
-      more detail and see what I’ve been building.
-    </p>
 
     <h2>Education</h2>
     <div class="entry">
@@ -257,6 +235,39 @@
       <p class="stack">
         <b>Tech stack:</b> React · TypeScript · Tailwind CSS · Node.js · Express · PostgreSQL ·
         Drizzle ORM · Clerk · Cloudflare R2 · Railway
+      </p>
+    </div>
+
+    <div class="entry">
+      <div class="row head">
+        <span>School Parent Portal Mobile App</span>
+        <span>Sep 2026</span>
+      </div>
+      <div class="row sub">
+        <span
+          >Formel Parents ·
+          <a href="https://apps.apple.com/ci/app/formel-parents/id6816535369">App Store</a> ·
+          rodarly.me/formel-parents</span
+        >
+        <span>Published to the App Store</span>
+      </div>
+      <ul>
+        <li>
+          Rebuilt Formel’s parent portal as a native mobile app with React Native and Expo, published
+          to the App Store
+        </li>
+        <li>
+          Implemented push notifications for grades, attendance, fees and announcements, plus Apple and
+          Google sign-in
+        </li>
+        <li>
+          Approved by App Review on the first submission in under 48 hours, with a demo video I recorded
+          for Apple’s reviewers
+        </li>
+      </ul>
+      <p class="stack">
+        <b>Tech stack:</b> React Native · Expo · TypeScript · TanStack Query · Clerk · Expo
+        Notifications · EAS
       </p>
     </div>
 
@@ -330,12 +341,8 @@
       </div>
       <ul>
         <li>
-          Worked full-time in a high-volume restaurant where service depends on teamwork, holding pace
-          and accuracy at peak hours
-        </li>
-        <li>
-          Held the job full-time while building and supporting the school’s software outside my
-          scheduled hours
+          Worked full-time in a high-volume restaurant while building and supporting the school’s
+          software outside my shifts
         </li>
       </ul>
     </div>
@@ -343,9 +350,6 @@
     <h2>Skills</h2>
     <p class="skill"><b>Languages:</b> JavaScript, HTML, CSS, SQL, Bash</p>
     <p class="skill"><b>Frameworks:</b> Node.js, Express.js</p>
-    <p class="skill">
-      <b>Databases &amp; services:</b> PostgreSQL, Drizzle ORM, Clerk, Stripe, Cloudflare R2, Resend
-    </p>
     <p class="skill"><b>Tools:</b> Git &amp; GitHub, Railway, Claude Code</p>
     <p class="skill">
       <b>Practices:</b> REST API design, deployment and production monitoring, data migration, user
