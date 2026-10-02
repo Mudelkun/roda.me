@@ -90,7 +90,7 @@ function take(value) {
 
 /* Every string in the content tree, minus the keys that are never shown as prose. */
 const SKIP_KEYS = new Set([
-  "slug", "src", "poster", "logo", "video", "live", "source", "photo", "resume",
+  "slug", "src", "poster", "logo", "video", "live", "source", "appStore", "photo", "resume",
   "email", "github", "githubHandle", "instagram", "chatEndpoint", "icon", "id",
   "fonts", "display", "body", "radius", "ease", "index"
 ]);

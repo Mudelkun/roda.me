@@ -80,12 +80,35 @@
       panels + "</div>";
   }
 
+  /* A project with its own page elsewhere on the site (Formel's iPhone app, from Formel's
+     page): a card with the other project's poster that opens it. */
+  function relatedHtml(rel) {
+    var other = findProject(rel.slug);
+    if (!other) return "";
+    return (rel.text ? paras(rel.text) : "") +
+      '<a class="prelated" href="' + esc(UI.projectUrl(other.slug)) + '">' +
+        '<img class="prelated__thumb" src="' + esc(other.poster || "") + '" alt="" loading="lazy" data-frame>' +
+        '<span class="prelated__body">' +
+          (other.logo ? '<img class="prelated__logo" src="' + esc(other.logo) + '" alt="" width="40" height="40">' : "") +
+          '<span class="prelated__names">' +
+            '<span class="prelated__name">' + esc(other.title.split(":")[0].trim()) + "</span>" +
+            '<span class="prelated__kind">' + esc((other.title.split(":")[1] || "").trim()) + "</span>" +
+          "</span>" +
+          '<span class="prelated__go">View the project <span aria-hidden="true">→</span></span>' +
+        "</span>" +
+      "</a>";
+  }
+
   /* ---------- sections ---------- */
 
   function sections(project) {
     var list = [];
 
     if (project.description) list.push({ id: "overview", title: "Short description", html: paras(project.description) });
+    if (project.related) {
+      var rel = relatedHtml(project.related);
+      if (rel) list.push({ id: "related", title: project.related.heading, html: rel });
+    }
     if (project.whatItDoes) list.push({ id: "what", title: "What it does", html: paras(project.whatItDoes) });
     if (project.whyIBuiltIt) list.push({ id: "why", title: "Why I built it", html: paras(project.whyIBuiltIt) });
 
@@ -154,7 +177,10 @@
   function heroBlock(project) {
     var facts = project.facts || {};
     var rows = Object.keys(facts).map(function (key) {
-      var value = esc(facts[key]);
+      var linked = facts[key] && facts[key].project ? findProject(facts[key].project) : null;
+      var value = linked
+        ? '<a href="' + esc(UI.projectUrl(linked.slug)) + '">' + esc(linked.title.split(":")[0].trim()) + "</a>"
+        : esc(facts[key]);
       if (key === "Domain" && project.live) {
         value = '<a href="' + esc(project.live) + '" target="_blank" rel="noopener">' + value + "</a>";
       }
@@ -165,6 +191,7 @@
 
     var actions =
       (project.live ? '<a class="btn btn--primary" href="' + esc(project.live) + '" target="_blank" rel="noopener">Try it live →</a>' : "") +
+      (project.appStore ? UI.storeButton(project.appStore, "On the App Store") : "") +
       (project.source ? '<a class="btn" href="' + esc(project.source) + '" target="_blank" rel="noopener">Source on GitHub</a>' : "");
 
     /* "Name: descriptor" - the descriptor after the colon is set in the accent gradient.
@@ -174,14 +201,15 @@
     var titleClass = "phero__title" + (tail.trim().length > 27 ? " phero__title--long" : "");
 
     /* The logo links to the live app when there is one; either way it gets the hover lift. */
-    var logoClass = "phero__logo" + (project.logoRound ? " phero__logo--round" : "");
+    var logoClass = "phero__logo" + (project.logoRound ? " phero__logo--round" : "") + (project.logoApp ? " phero__logo--app" : "");
+    var logoHref = project.live || project.appStore;
     var logoImgs = project.logo
       ? '<img class="' + logoClass + (project.logoDark ? " phero__logo--light" : "") + '" src="' + esc(project.logo) + '" alt="" width="64" height="64">' +
         (project.logoDark ? '<img class="' + logoClass + ' phero__logo--dark" src="' + esc(project.logoDark) + '" alt="" width="64" height="64">' : "")
       : "";
     var logo = !project.logo ? ""
-      : project.live
-        ? '<a class="phero__logo-link" data-reveal style="--d:.02s" href="' + esc(project.live) + '" target="_blank" rel="noopener" aria-label="Visit ' + esc(project.title.split(":")[0]) + ' (opens in a new tab)">' + logoImgs + "</a>"
+      : logoHref
+        ? '<a class="phero__logo-link" data-reveal style="--d:.02s" href="' + esc(logoHref) + '" target="_blank" rel="noopener" aria-label="Visit ' + esc(project.title.split(":")[0]) + ' (opens in a new tab)">' + logoImgs + "</a>"
         : '<span class="phero__logo-link" data-reveal style="--d:.02s">' + logoImgs + "</span>";
 
     return '' +
@@ -245,6 +273,7 @@
 
     if (!hasShowcase(project)) return "";
     var shots = showcaseShots(project);
+    if (project.phone) return phoneMediaBlock(project, shots);
 
     var imgs = shots.map(function (shot, i) {
       return '<img class="bslides__img' + (i === 0 ? " is-active" : "") + '" src="' + esc(shot.src) + '" ' +
@@ -275,6 +304,57 @@
             thumbs +
             (shots.length > 1 ? stepButton(1) : "") +
             (project.live ? '<a class="btn btn--primary pmedia__try" href="' + esc(project.live) + '" target="_blank" rel="noopener">Try it →</a>' : "") +
+          "</div>" +
+        "</div>" +
+      "</section>";
+  }
+
+  /* A phone app: its screens are portrait, so the card holds two phones side by side -
+     a silent clip of the app in use, and the screenshots crossfading beside it. */
+  function phoneMediaBlock(project, shots) {
+    var clip = project.clip;
+    var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    var video = clip ? '' +
+      '<figure class="phone phone--clip">' +
+        '<video ' + (reduced ? "controls " : "autoplay ") + 'muted loop playsinline preload="metadata" ' +
+          'poster="' + esc(clip.poster || "") + '" aria-label="' + esc(clip.caption || "The app in use") + '">' +
+          '<source src="' + esc(clip.src) + '" type="video/mp4">' +
+        "</video>" +
+      "</figure>" : "";
+
+    var imgs = shots.map(function (shot, i) {
+      return '<img class="bslides__img' + (i === 0 ? " is-active" : "") + '" src="' + esc(shot.src) + '" ' +
+        'alt="' + esc(shot.caption || "Screenshot") + '" data-caption="' + esc(shot.caption || "") + '">';
+    }).join("");
+
+    var thumbs = shots.length > 1 ? '<div class="showcase__thumbs" role="group" aria-label="Choose a screenshot">' +
+      shots.map(function (shot, i) {
+        return '<button class="showcase__thumb' + (i === 0 ? " is-active" : "") + '" type="button" data-slide-to="' + i + '" ' +
+          'aria-pressed="' + (i === 0 ? "true" : "false") + '" aria-label="' + esc(shot.caption || "Screenshot " + (i + 1)) + '">' +
+          '<img src="' + esc(shot.src) + '" alt="" loading="lazy">' +
+          "</button>";
+      }).join("") + "</div>" : "";
+
+    return '' +
+      '<section class="pmedia pmedia--dark pmedia--phone" aria-label="Demo" data-slides-scope>' +
+        '<div class="pmedia__head">' +
+          (clip && clip.label ? '<span class="note">' + esc(clip.label) + "</span>" : "") +
+          '<span class="note">Click a screen to enlarge</span>' +
+        "</div>" +
+        '<div class="phones">' +
+          video +
+          '<button class="pmedia__frame phone" type="button" id="showcase-frame" data-frame data-slides="4200" aria-label="Enlarge screenshot">' +
+            imgs +
+          "</button>" +
+        "</div>" +
+        '<div class="showcase__bar">' +
+          '<p class="note showcase__cap" data-slide-cap>' + esc(shots[0].caption || "") + "</p>" +
+          '<div class="showcase__row">' +
+            (shots.length > 1 ? stepButton(-1) : "") +
+            thumbs +
+            (shots.length > 1 ? stepButton(1) : "") +
+            (project.appStore ? UI.storeButton(project.appStore, "Get the app", "pmedia__try") : "") +
           "</div>" +
         "</div>" +
       "</section>";
@@ -340,6 +420,7 @@
     return '' +
       '<div class="actionbar">' +
         (project.live ? '<a class="btn btn--primary" href="' + esc(project.live) + '" target="_blank" rel="noopener">Try it live →</a>' : "") +
+        (project.appStore ? UI.storeButton(project.appStore, "App Store") : "") +
         (project.source ? '<a class="btn" href="' + esc(project.source) + '" target="_blank" rel="noopener">Source</a>' : "") +
         '<button class="btn btn--ask" type="button" id="ask-btn" aria-label="Ask my AI about this build">' +
           '<span class="aiorb aiorb--xs" aria-hidden="true"><svg class="aiorb__spark" viewBox="0 0 24 24"><path d="M12 1.5c.5 5.6 4.9 10 10.5 10.5-5.6.5-10 4.9-10.5 10.5C11.5 16.9 7.1 12.5 1.5 12 7.1 11.5 11.5 7.1 12 1.5Z"/></svg></span>' +

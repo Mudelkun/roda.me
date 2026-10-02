@@ -594,6 +594,11 @@
   padding: 0 0 12px 12px; /* room for the offset box, which sits down-left */
 }
 .projects__list > .note { grid-column: 1 / -1; }
+/* Wide screens: all three on one row, a little smaller. */
+@media (min-width: 1280px) {
+  .projects__list { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px; max-width: 1380px; }
+  .projects__list .pcard__title { font-size: 19px; }
+}
 
 .pcard {
   --pcard-ink: var(--fg);

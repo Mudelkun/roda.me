@@ -29,8 +29,8 @@
         "</div>";
     }
 
-    /* No demo video: the first screenshot, held still. The detail page has the rest. */
-    var shot = (project.screens || [])[0] || (project.poster ? { src: project.poster } : null);
+    /* No demo video: the poster (or the first screenshot), held still. The detail page has the rest. */
+    var shot = project.poster ? { src: project.poster } : (project.screens || [])[0];
 
     return '' +
       '<div class="pcard__media">' +
@@ -84,6 +84,7 @@
 
   function cardBody(project) {
     var actions = project.live ? '<a class="btn btn--primary" href="' + esc(project.live) + '" target="_blank" rel="noopener">Try it live ↗</a>' : "";
+    if (project.appStore) actions += UI.storeButton(project.appStore, "App Store");
     if (project.source) {
       actions += '<a class="btn" href="' + esc(project.source) + '" target="_blank" rel="noopener">Source</a>';
     }

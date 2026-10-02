@@ -48,7 +48,7 @@ window.SITE = {
     lang: "fr",
     source: "en",
     providers: ["google", "mymemory"],
-    protect: ["Formel", "Louvo", "Rodarly", "École Horizon", "Mudelkun", "Hairify", "Fal.ai"],
+    protect: ["Formel", "Formel Parents", "App Store", "Louvo", "Rodarly", "École Horizon", "Mudelkun", "Hairify", "Fal.ai"],
     /* Short labels carry no sentence for a translator to read, so a few come back
        wrong: "May" as the verb, "Wed" as "marry". These are settled here; every
        other string on the site is left to the provider. */
@@ -80,7 +80,7 @@ window.SITE = {
   chatEndpoint: "/api/chat",
 
   /* Chat replies make links clickable only for these sites, plus this site, my GitHub,
-     my Instagram and each project's live and source links. Anything else the AI writes
+     my Instagram and each project's live, source and App Store links. Anything else the AI writes
      stays plain text. */
   chatLinkHosts: ["rodarly.me", "fierbout.com"],
 
@@ -152,6 +152,12 @@ window.SITE = {
       logo: "assets/media/formel-logo-reverse.png",
       logoRound: true,
       facts: { Role: "Full-stack developer", Timeline: "Feb – Apr 2026", Status: "Live" },
+      /* The parent portal's mobile app has its own page; this card on Formel's page opens it. */
+      related: {
+        slug: "formel-parents",
+        heading: "The mobile app",
+        text: "The parent portal is also a native mobile app, Formel Parents, published to the App Store. It has its own page, with the demo I recorded for Apple’s review team."
+      },
       description: "Formel is a complete school management platform I built alongside my father for our family’s private school in Haiti. I handled the software development, while my father provided the real-world context and helped define the features the school needed.\n\nThe platform was created to replace paper-based and Excel workflows with one centralized system that can be managed remotely from Canada. It now brings together the school’s core operations and includes dedicated portals for administrators, teachers, students, and parents. Formel was officially implemented in April and now supports more than 400 users.",
       /* Features by area. The detail page shows one area at a time as tabs.
          icon: a key from assets/js/icons.js; short: the tab label. */
@@ -268,6 +274,62 @@ window.SITE = {
         { src: "assets/media/louvo-screen-3.jpg", caption: "A haircut's own page — four angles, four hair types, its own URL and og:image" },
         { src: "assets/media/louvo-screen-4.png", caption: "The result: drag the handle to wipe between your photo and the new cut, then download or share it" }
       ]
+    },
+    {
+      slug: "formel-parents",
+      index: "03",
+      title: "Formel Parents: Mobile app for parents",
+      pitch: "The parent portal of my school management platform, rebuilt as a native mobile app and published to the App Store. Parents follow their children’s grades, attendance, fees, report cards and school announcements, with a notification the moment something new is published.",
+      summary: "Formel Parents is the mobile version of Formel’s parent portal, published to the App Store. Parents follow their children’s grades, attendance, fees, report cards and the school’s announcements from their phone, and get a push notification as soon as the school publishes something new.",
+      tags: ["React Native", "Expo", "TypeScript", "TanStack Query", "Clerk"],
+      meta: ["Published to the App Store", "Approved on the first submission"],
+      appStore: "https://apps.apple.com/ci/app/formel-parents/id6816535369",
+      /* Three of the App Store screenshots side by side, for the home card. */
+      poster: "assets/media/formel-parents/poster.jpg",
+      /* The app's own icon, from formel-mobile/assets/icon.png; logoApp rounds it like iOS. */
+      logo: "assets/media/formel-parents/icon.png",
+      logoApp: true,
+      /* Portrait screens: the detail page shows the clip and the screenshots as two phones. */
+      phone: true,
+      /* Cut from the demo video recorded for Apple's App Review, sped up, without sound. */
+      clip: {
+        src: "assets/media/formel-parents/demo.mp4",
+        poster: "assets/media/formel-parents/demo-poster.jpg",
+        label: "The demo I recorded for App Review · no sound",
+        caption: "Linking a child, downloading a certificate, new grades, fees, a push notification and dark mode"
+      },
+      /* The App Store screenshots, rendered from the app's own code with its demo account. */
+      screens: [
+        { src: "assets/media/formel-parents/01-profil.jpg", caption: "A child’s profile: their school, class and enrolment, their documents and the family’s contacts" },
+        /* From the App Review video, with the App Store set's status bar. */
+        { src: "assets/media/formel-parents/10-connexion.jpg", caption: "Sign in with Apple or Google in one tap, or with an email and password" },
+        { src: "assets/media/formel-parents/02-notes.jpg", caption: "New grades as soon as a teacher publishes them, with the teacher’s comment" },
+        { src: "assets/media/formel-parents/03-frais.jpg", caption: "What is left to pay this year, the next installments due, and the scholarship already applied" },
+        { src: "assets/media/formel-parents/04-assiduite.jpg", caption: "Absences and late arrivals, with a prompt to justify the one still unexcused" },
+        { src: "assets/media/formel-parents/05-annonce.jpg", caption: "An announcement from the school, opened straight from its notification" },
+        { src: "assets/media/formel-parents/06-bulletins.jpg", caption: "The official report card and grade transcript for each trimester, as PDFs" },
+        { src: "assets/media/formel-parents/07-famille.jpg", caption: "One account for the whole family: pick a child to see their school life" },
+        { src: "assets/media/formel-parents/08-competences.jpg", caption: "Younger classes are assessed on skills instead of marks: acquired, or still in progress" },
+        { src: "assets/media/formel-parents/09-par-matiere.jpg", caption: "Results by subject, with each teacher and coefficient" }
+      ],
+      facts: { Role: "Mobile developer", Timeline: "Sep 2026", Platform: "iOS 17+", Status: "Published to the App Store", "App Review": "Approved first try, under 48 h", "Part of": { project: "formel" } },
+      description: "Formel Parents is the mobile version of the parent portal in Formel, the school management platform I built for my family’s school. It puts the school in parents’ pockets: their children’s grades, attendance, fees, report cards, documents and announcements, with a push notification as soon as the school publishes something new.\n\nI built it with React Native and Expo, with push notifications and sign-in with Apple and Google, and published it to the App Store in September 2026. Apple approved the first build I submitted, in under 48 hours. I recorded a demo video to walk the review team through the app, and the clip on this page is cut from it.\n\nIt talks to the same back-end and database as the web portal, so parents see exactly what the school has recorded, and no child’s record is stored in the app itself.",
+      features: [
+        { icon: "academic", name: "Grades and report cards", text: "New grades appear as soon as a teacher publishes them, also grouped by subject with each coefficient. The official trimester report cards download as PDFs." },
+        { icon: "calendar-x", name: "Attendance", text: "Every absence and late arrival, as a list or on a calendar. Parents send an excuse for the ones still unjustified, right from the app." },
+        { icon: "circle-dollar-sign", name: "Fees", text: "What the family still owes, installment by installment: the scholarship, what is paid, what is coming due, and the full payment history." },
+        { icon: "bell", name: "Push notifications", text: "Alerts for grades, attendance, fees, documents, announcements and the student’s file, each with its own switch, and quiet hours at night." },
+        { icon: "megaphone", name: "School announcements", text: "The school’s news feed in the app. Urgent announcements reach every family straight away." },
+        { icon: "parents", name: "The whole family, one account", text: "Parents link each child with the school’s access code and switch between them, in French or English, in light or dark mode." },
+        { icon: "key-round", name: "Sign in with Apple and Google", text: "Parents sign in with their Apple or Google account, or with an email and password, and can manage or delete their account from the app." }
+      ],
+      stack: [
+        { layer: "Mobile", items: ["React Native", "Expo", "TypeScript", "Expo Router", "TanStack Query"] },
+        { layer: "Back-end", items: ["Node.js", "Express", "PostgreSQL"] },
+        { layer: "Auth + notifications", items: ["Clerk", "Expo Notifications"] },
+        { layer: "Build + release", items: ["EAS", "App Store"] }
+      ],
+      whatILearned: "Formel Parents was my first mobile app, and my first time shipping software through the App Store. Building for a phone is a different job from building for the web: I had to rethink the interface for a small screen, the keyboard and touch, and handle notifications that arrive while the app is closed.\n\nPublishing it taught me the release side of software. I built it with EAS, met App Review’s requirements, including a demo account reviewers can sign in with, and recorded a demo video that walks Apple’s review team through the app. It was approved on the first submission, in under 48 hours. I also learned to plan updates, since a change to native code needs a new store build while a JavaScript change can be delivered over the air.\n\nIt also taught me to keep two clients in step. The app shares its data rules with the web portal, so parents see the same grades, fees and attendance whichever one they open."
     }
   ]
 };

@@ -101,7 +101,8 @@ ${PROFILE}
 
 function systemFor(project) {
   if (!project) return INSTRUCTIONS;
-  const name = project.charAt(0).toUpperCase() + project.slice(1);
+  // "formel-parents" -> "Formel Parents", the name profile.md uses for it.
+  const name = project.split("-").map((word) => word.charAt(0).toUpperCase() + word.slice(1)).join(" ");
   return `${INSTRUCTIONS}\n\nThe visitor is reading the ${name} project page, so "this project" or "it" most likely means ${name}.`;
 }
 
@@ -373,6 +374,7 @@ const TYPES = {
   ".webp": "image/webp",
   ".ico": "image/x-icon",
   ".pdf": "application/pdf",
+  ".mp4": "video/mp4",
   ".woff2": "font/woff2",
   ".txt": "text/plain; charset=utf-8",
 };
@@ -428,10 +430,35 @@ async function serveStatic(req, res) {
     return res.end();
   }
 
+  // Byte ranges, because Safari will not play a video without them: it asks for the
+  // first two bytes and gives up if it gets the whole file back instead.
+  const type = TYPES[ext] || "application/octet-stream";
+  const range = /^bytes=(\d*)-(\d*)$/.exec(req.headers.range || "");
+  if (range && (range[1] || range[2])) {
+    const start = range[1] ? Number(range[1]) : Math.max(0, stat.size - Number(range[2]));
+    const end = range[1] && range[2] ? Math.min(Number(range[2]), stat.size - 1) : stat.size - 1;
+    if (start > end || start >= stat.size) {
+      res.writeHead(416, { ...headers, "Content-Range": `bytes */${stat.size}` });
+      return res.end();
+    }
+    res.writeHead(206, {
+      ...headers,
+      "Content-Type": type,
+      "Content-Length": end - start + 1,
+      "Content-Range": `bytes ${start}-${end}/${stat.size}`,
+      "Accept-Ranges": "bytes",
+    });
+    if (req.method === "HEAD") return res.end();
+    return fs.createReadStream(absolute, { start, end })
+      .on("error", () => res.destroy())
+      .pipe(res);
+  }
+
   res.writeHead(200, {
     ...headers,
-    "Content-Type": TYPES[ext] || "application/octet-stream",
+    "Content-Type": type,
     "Content-Length": stat.size,
+    "Accept-Ranges": "bytes",
   });
   if (req.method === "HEAD") return res.end();
 

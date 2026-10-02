@@ -215,6 +215,8 @@ a { color: inherit; }
 }
 
 .btn--ghost { border-color: var(--accent); color: var(--accent-text); }
+/* The App Store button (UI.storeButton): Apple's mark before the label. */
+.btn--store .btn__mark { flex: none; position: relative; top: -1px; }
 
 .btn--icon {
   width: 44px; height: 44px; padding: 0; min-height: 0;

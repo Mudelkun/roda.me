@@ -100,7 +100,8 @@
     var hosts = [location.hostname].concat(SITE.chatLinkHosts || []);
     var p = SITE.profile || {};
     [p.github, p.instagram].concat((SITE.projects || []).map(function (proj) { return proj.live; }),
-      (SITE.projects || []).map(function (proj) { return proj.source; })).forEach(function (url) {
+      (SITE.projects || []).map(function (proj) { return proj.source; }),
+      (SITE.projects || []).map(function (proj) { return proj.appStore; })).forEach(function (url) {
       try { if (url) hosts.push(new URL(url).hostname); } catch (e) { /* not a URL */ }
     });
     return hosts.map(function (h) { return String(h).toLowerCase().replace(/^www\./, ""); }).filter(Boolean);
@@ -607,8 +608,8 @@
 
     if (/project|work|portfolio|built/.test(q)) {
       return "I've put " + projects.length + " builds here: " +
-        projects.map(function (proj) { return proj.title + " (" + proj.tags.slice(0, 3).join(", ") + ")"; }).join(" and ") +
-        ". Ask me about either one.";
+        projects.map(function (proj) { return proj.title + " (" + proj.tags.slice(0, 3).join(", ") + ")"; }).join("; ") +
+        ". Ask me about any of them.";
     }
 
     return "I can answer questions about my projects, the stack behind them, and my availability. " +

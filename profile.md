@@ -44,10 +44,10 @@ Rodarly is a 19-year-old computer science student and software developer. He tau
 - Recorded more than 2 hours of training videos that staff learn the system from, so non-technical users can work independently.
 
 ## Skills
-- Languages: JavaScript, TypeScript, HTML, CSS, SQL, Bash
-- Frameworks and libraries: React, Next.js, Node.js, Express
-- Databases and services: PostgreSQL, Drizzle ORM, Clerk, Stripe, Cloudflare R2, Resend, Fal.ai
+- Languages: JavaScript, HTML, CSS, SQL, Bash
+- Frameworks: Node.js, Express
 - Tools: Git and GitHub, Railway, Claude Code
+- He builds his projects with Claude Code. The other technologies named in each project's tech stack below are what that project is built with, not skills he lists for himself; if asked about one of them, say the project uses it rather than claiming expertise in it.
 - Practices: REST API design, deployment and production monitoring, data migration, user training and support
 
 ## Projects
@@ -58,7 +58,7 @@ Rodarly is a 19-year-old computer science student and software developer. He tau
 - Timeline: February – April 2026; officially implemented in April 2026.
 - Role: sole developer. He built it alongside his father: Rodarly did all of the software development, and his father provided the real-world context and helped define the features the school needed.
 
-What it is: a complete school management platform for his family's private school in Haiti. He built it so the school could be managed and operated remotely from Canada. It replaced the school's paper and Excel workflows with one centralized system, and it serves more than 400 users every day: students, parents, teachers and administration. For the 2026–2027 school year, a major update added dedicated portals for students, teachers and parents.
+What it is: a complete school management platform for his family's private school in Haiti. He built it so the school could be managed and operated remotely from Canada. It replaced the school's paper and Excel workflows with one centralized system, and it serves more than 400 users every day: students, parents, teachers and administration. For the 2026–2027 school year, a major update added dedicated portals for students, teachers and parents. The parent portal also exists as a mobile app published to the App Store, Formel Parents (see below).
 
 Highlights:
 - Turned administrative work that used to take the school weeks (records, tuition billing, grades, report cards) into hours.
@@ -80,6 +80,39 @@ Tech stack:
 - Hosting: Railway
 
 What he learned: Formel was one of the first projects he deployed to production, and it taught him a lot about building and maintaining real software. He had just finished learning SQL, so designing the database was one of his first experiences making architectural decisions that affect the rest of an application, which taught him to plan before writing code. Because many people use Formel every day, he learned to design interfaces that are clear, efficient and easy to understand, and to keep adapting them so common tasks are smoother. Recording the training videos showed him the business side of software: building a feature is only part of the job; software also has to be understandable, usable and supported.
+
+### Formel Parents — mobile app for parents (published to the App Store)
+- App Store: https://apps.apple.com/ci/app/formel-parents/id6816535369 (free; the seller listed is Rodarly Clavensky Perilus)
+- Page on the site: rodarly.me/formel-parents
+- Status: published to the App Store in September 2026. It runs on iOS 17 or later. The codebase is private.
+- App Review: Apple approved the first build he submitted, in under 48 hours, with no rejection and no resubmission. He recorded a demo video walking Apple's review team through the app and describing how it works; the clip on the project page is cut from that video.
+- Timeline: September 2026
+- Role: solo build
+
+What it is: the mobile version of Formel's parent portal, a native mobile app built with React Native and Expo. Parents follow their children's school life from their phone: grades and report cards, attendance, fees and payments, homework, the school's documents and announcements, with push notifications as soon as the school publishes something new. It is a client of the same back-end and database as Formel's web parent portal, so parents see exactly what the school has recorded, and no child's record is stored in the app itself. The app is in French by default, with English available.
+
+Features:
+- Grades as soon as a teacher publishes them, also grouped by subject with each coefficient; skills-based assessment for younger classes; official trimester report cards and grade transcripts downloadable as PDFs.
+- Attendance as a list or on a calendar; parents send an excuse for an unjustified absence from the app.
+- Fees: what the family still owes, installment by installment, scholarships, what is paid and the payment history.
+- Push notifications for grades and homework, attendance, fees, documents and report cards, school announcements and the student's file, each group with its own switch, plus quiet hours at night (urgent announcements always get through).
+- The school's announcements feed; urgent announcements are pushed to every family.
+- One parent account for the whole family: parents link each child with the school's access code and switch between them. Light and dark mode.
+- Sign in with Apple and Sign in with Google, which he implemented in the app, alongside email and password. Parents can manage or delete their account from the app.
+
+Highlights:
+- Approved by App Review on the first submission, in under 48 hours. He prepared a demo account for Apple's reviewers and recorded a demo video explaining the app.
+- Implemented push notifications and sign-in with Apple and Google.
+- Built and released with EAS (Expo Application Services), with over-the-air updates for JavaScript changes.
+- Shares its data rules with the web portal so both clients show the same grades, fees and attendance.
+
+Tech stack:
+- Mobile: React Native, Expo, TypeScript, Expo Router, TanStack Query
+- Back-end (shared with Formel): Node.js, Express, PostgreSQL
+- Auth and notifications: Clerk, Expo Notifications
+- Build and release: EAS, App Store
+
+What he learned: Formel Parents was his first mobile app and his first time shipping software through the App Store. Building for a phone meant rethinking the interface for a small screen, the keyboard and touch, and handling notifications that arrive while the app is closed. Publishing it taught him the release side of software: EAS builds, App Review's requirements (it was approved on the first try), and planning updates, since a change to native code needs a new store build while a JavaScript change can be delivered over the air. It also taught him to keep two clients in step with the same data rules.
 
 ### Louvo — AI hairstyle try-on
 - Live: https://www.louvo.app

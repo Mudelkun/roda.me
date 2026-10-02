@@ -10,7 +10,7 @@ a small Node server hosts them and answers the chat.
 ## Features
 
 - **Live GitHub activity.** A contribution graph, streaks and a public event feed that refresh on their own while the page is open.
-- **One page per project.** Each project has its own address (`/formel`, `/louvo`) with a write-up, grouped features,
+- **One page per project.** Each project has its own address (`/formel`, `/louvo`, `/formel-parents`) with a write-up, grouped features,
   stack logos, a screenshot lightbox and a table of contents that follows your scroll.
 - **Per-project branding.** A project page and its card can use that product's own colours and fonts.
 - **English / French switch.** The live page is translated in place, so there is no second copy of the text to keep in sync.
@@ -29,6 +29,7 @@ a small Node server hosts them and answers the chat.
 | --- | --- | --- |
 | **Formel** | A school management platform running my family's private school in Haiti, used by more than 400 people | Private codebase |
 | **Louvo** | An AI hairstyle try-on: upload a selfie and see yourself with any haircut | [louvo.app](https://www.louvo.app) · [source](https://github.com/Mudelkun/Louvo) |
+| **Formel Parents** | Formel's parent portal as a native mobile app, published to the App Store: grades, attendance, fees and announcements, with push notifications | [App Store](https://apps.apple.com/ci/app/formel-parents/id6816535369) |
 
 ## Run it locally
 
@@ -48,7 +49,7 @@ server.mjs              serves the site and answers the chat at POST /api/chat
 profile.md              everything the chat knows about me (never served)
 index.html              home page: hero, live activity, project cards, contact
 project.html            template for the project pages
-formel.html, louvo.html generated from project.html by tools/build-pages.js
+<slug>.html            one per project, generated from project.html by tools/build-pages.js
 assets/js/data.js       all of the site's content: profile, projects, settings
 assets/js/ui.js         theme, mobile nav, binds data.js into the page
 assets/js/github.js     live contribution graph, stats and event feed
